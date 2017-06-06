@@ -4,6 +4,7 @@ import java.io.IOException;
 
 public class CSVReader {
 
+
     public static void main(String[] args) {
 
         String csvFile = "country.csv";

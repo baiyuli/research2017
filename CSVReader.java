@@ -14,19 +14,24 @@ import java.lang.String;
 
 public class CSVReader {
 
-  public static ArrayList<String[]> getDataFromCSVFile(String file){
+  public static ArrayList<Integer[]> getDataFromCSVFile(String file){
     String csvFile = file;
     String line = "";
     String cvsSplitBy = ",";
-    ArrayList<String[]> array = new ArrayList<String[]>();
+    ArrayList<Event> array = new ArrayList<Event>();
     try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
         while ((line = br.readLine()) != null) {
 
             // use comma as separator
             String[] event = line.split(cvsSplitBy);
+            String id = event[0];
+            Timestamp startTime = Timestamp.valueOf(event[1]);
+            Timestamp endTime = Timestamp.valueOf(event[2]);
+            long length = endTime - startTime;
+            Event temp = new Event(id, startTime, endTime, length);
 
-            array.add(event);
+            array.add(temp);
 
         }
 
@@ -64,11 +69,9 @@ public class CSVReader {
       return arrayOfLengths;
     }
 
-  public static void toString(ArrayList<String[]> array) {
+  public static void toString(ArrayList<Event> array) {
     for (int x = 0; x < array.size(); x++) {
-      for (int y = 0; y < array.get(x).length; y++) {
-        System.out.print(array.get(x)[y] + " ");
-      }
+      System.out.println("ID: " + array.get(x)
       System.out.println();
     }
   }
@@ -87,17 +90,17 @@ public class CSVReader {
     }};
 
   public static void main(String[] args) {
-      ArrayList<String[]> array = getDataFromCSVFile("events.csv");
+      ArrayList<Integer[]> array = getDataFromCSVFile("events.csv");
       toString(array);
-      try {
-        ArrayList<String[]> lengthArray = lengthsToCSVFile (array);
-        toString(lengthArray);
-        Collections.sort(lengthArray, lengthComparator);
-        toString(lengthArray);
-	SortedCSVtoText(lengthArray);
-      } catch (FileNotFoundException ex) {
-        ex.printStackTrace();
-      }
+  //     try {
+  //       ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
+  //       toString(lengthArray);
+  //       Collections.sort(lengthArray, lengthComparator);
+  //       toString(lengthArray);
+	// SortedCSVtoText(lengthArray);
+  //     } catch (FileNotFoundException ex) {
+  //       ex.printStackTrace();
+  //     }
 
 
     }
@@ -131,7 +134,7 @@ public class CSVReader {
       for (int x = 0; x < a.size(); x++) {
           sb.append(a.get(x)[0] + " " +  a.get(x)[1]);
           sb.append('\n');
-          
+
       }
       pw.write(sb.toString());
       pw.close();

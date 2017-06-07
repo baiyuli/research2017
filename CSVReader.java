@@ -14,7 +14,7 @@ import java.lang.String;
 
 public class CSVReader {
 
-  public static ArrayList<Integer[]> getDataFromCSVFile(String file){
+  public static ArrayList<Event> getDataFromCSVFile(String file){
     String csvFile = file;
     String line = "";
     String cvsSplitBy = ",";
@@ -25,12 +25,11 @@ public class CSVReader {
 
             // use comma as separator
             String[] event = line.split(cvsSplitBy);
-            String id = event[0];
+            int id = Integer.parseInt(event[0]);
             Timestamp startTime = Timestamp.valueOf(event[1]);
             Timestamp endTime = Timestamp.valueOf(event[2]);
-            long length = endTime - startTime;
+            int length = (int)(endTime.getTime() - startTime.getTime());
             Event temp = new Event(id, startTime, endTime, length);
-
             array.add(temp);
 
         }
@@ -38,30 +37,22 @@ public class CSVReader {
     } catch (IOException e) {
         e.printStackTrace();
     }
-    System.out.println(array.toString());
     return array;
   }
 
-  // method to get the length of the event
-    public static long getLengthOfEvent (String s, String e) {
-      Timestamp start = Timestamp.valueOf(s);
-      Timestamp end = Timestamp.valueOf(e);
-      return end.getTime() - start.getTime();
-    }
     //creates a csv file of the event ID and event lengths. it also returns an
     // ArrayList<String> object that contains the event ID and the event lengths
-    public static ArrayList<String[]> lengthsToCSVFile(ArrayList<String[]> a) throws FileNotFoundException{
+    public static ArrayList<Integer[]> lengthsToCSVFile(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("test.csv"));
       StringBuilder sb = new StringBuilder();
-      ArrayList<String[]> arrayOfLengths = new ArrayList<String[]>();
+      ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
       for (int x = 0; x < a.size(); x++) {
-          sb.append(a.get(x)[0]);
+          sb.append(a.get(x).getEventID());
           sb.append(',');
-          long temp = getLengthOfEvent(a.get(x)[1], a.get(x)[2]);
-          String length = Long.toString(temp);
+          String length = Long.toString(a.get(x).getLength());
           sb.append(length);
           sb.append('\n');
-          String[] arr = {a.get(x)[0], length};
+          Integer[] arr = {a.get(x).getEventID(), a.get(x).getLength()};
           arrayOfLengths.add(arr);
       }
       pw.write(sb.toString());
@@ -69,46 +60,54 @@ public class CSVReader {
       return arrayOfLengths;
     }
 
-  public static void toString(ArrayList<Event> array) {
+  public static void toStringLengths(ArrayList<Integer[]> array) {
     for (int x = 0; x < array.size(); x++) {
-      System.out.println("ID: " + array.get(x)
+      for (int y = 0; y < array.get(x).length; y++) {
+        System.out.print(array.get(x)[y] + " ");
+      }
+      System.out.println();
+    }
+  }
+
+  public static void toStringEvent(ArrayList<Event> a) {
+    for (int x = 0; x < a.size(); x++) {
+      System.out.print(a.get(x).getEventID() + " ");
+      System.out.print(a.get(x).getStartTime() + " ");
+      System.out.print(a.get(x).getEndTime() + " ");
+      System.out.print(a.get(x).getLength() + " ");
       System.out.println();
     }
   }
 
 
   /*Comparator for sorting the list by Student Name*/
- public static Comparator<String[]> lengthComparator = new Comparator<String[]>() {
+ public static Comparator<Integer[]> lengthComparator = new Comparator<Integer[]>() {
 
-	public int compare(String[] s1, String[] s2) {
-	   String length1 = s1[1];
-     String length2 = s2[1];
-
+	public int compare(Integer[] s1, Integer[] s2) {
 	   //ascending order
-	   return length1.compareTo(length2);
+	   return s1[1] - s2[1];
 
     }};
 
   public static void main(String[] args) {
-      ArrayList<Integer[]> array = getDataFromCSVFile("events.csv");
-      toString(array);
-  //     try {
-  //       ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
-  //       toString(lengthArray);
-  //       Collections.sort(lengthArray, lengthComparator);
-  //       toString(lengthArray);
-	// SortedCSVtoText(lengthArray);
-  //     } catch (FileNotFoundException ex) {
-  //       ex.printStackTrace();
-  //     }
+      ArrayList<Event> array = getDataFromCSVFile("events.csv");
+      toStringEvent(array);
+      try {
+        ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
+        toStringLengths(lengthArray);
+        Collections.sort(lengthArray, lengthComparator);
+	       SortedCSVtoText(lengthArray);
+      } catch (FileNotFoundException ex) {
+        ex.printStackTrace();
+      }
 
 
     }
   // converts sorted CSV file into text file to be used by plotting program
-  public static void SortedCSVtoText(ArrayList<String[]> a) throws FileNotFoundException{
+  public static void SortedCSVtoText(ArrayList<Integer[]> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("Lengths.txt"));
       StringBuilder sb = new StringBuilder();
-      ArrayList<String[]> arrayOfLengths = new ArrayList<String[]>();
+      ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
       // append the parameter information to the text file
       sb.append("Title Length of Events");
       sb.append('\n');

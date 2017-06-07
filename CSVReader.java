@@ -129,7 +129,7 @@ public class CSVReader {
       sb.append('\n');
 
       for (int x = 0; x < a.size(); x++) {
-          sb.append(a.get(x)[0] + " " +  a.get(x)[1]);
+          sb.append(x+1 + " " +  a.get(x)[1]);
           sb.append('\n');
           
       }

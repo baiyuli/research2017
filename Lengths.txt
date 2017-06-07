@@ -1,0 +1,15 @@
+Title Length of Events
+xTitle Event
+yTitle Duration
+xLower 0
+xUpper 5
+xInterval 1
+yLower -1000
+yUpper 31536000000
+yInterval 1000000000
+Data
+005 -1000
+003 18486000000
+001 23583600000
+002 2678400000
+004 31536000000

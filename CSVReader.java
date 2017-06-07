@@ -94,11 +94,46 @@ public class CSVReader {
         toString(lengthArray);
         Collections.sort(lengthArray, lengthComparator);
         toString(lengthArray);
+	SortedCSVtoText(lengthArray);
       } catch (FileNotFoundException ex) {
         ex.printStackTrace();
       }
 
 
     }
+  // converts sorted CSV file into text file to be used by plotting program
+  public static void SortedCSVtoText(ArrayList<String[]> a) throws FileNotFoundException{
+      PrintWriter pw = new PrintWriter(new File("Lengths.txt"));
+      StringBuilder sb = new StringBuilder();
+      ArrayList<String[]> arrayOfLengths = new ArrayList<String[]>();
+      // append the parameter information to the text file
+      sb.append("Title Length of Events");
+      sb.append('\n');
+      sb.append("xTitle Event");
+      sb.append('\n');
+      sb.append("yTitle Duration");
+      sb.append('\n');
+      sb.append("xLower 0");
+      sb.append('\n');
+      sb.append("xUpper " + a.size());
+      sb.append('\n');
+      sb.append("xInterval 1");
+      sb.append('\n');
+      sb.append("yLower "+ a.get(0)[1]);
+      sb.append('\n');
+      sb.append("yUpper " + a.get(a.size()-1)[1]);
+      sb.append('\n');
+      sb.append("yInterval 1000000000");
+      sb.append('\n');
+      sb.append("Data");
+      sb.append('\n');
 
+      for (int x = 0; x < a.size(); x++) {
+          sb.append(a.get(x)[0] + " " +  a.get(x)[1]);
+          sb.append('\n');
+          
+      }
+      pw.write(sb.toString());
+      pw.close();
+    }
 }

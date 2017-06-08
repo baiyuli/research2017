@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.lang.String;
 
 public class CSVReader {
+	private ArrayList<Event> eventList; 
 
   public static ArrayList<Event> getDataFromCSVFile(String file){
     String csvFile = file;
@@ -96,42 +97,49 @@ public class CSVReader {
         ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
         toStringLengths(lengthArray);
         Collections.sort(lengthArray, lengthComparator);
-	       SortedCSVtoText(lengthArray);
+	     
       } catch (FileNotFoundException ex) {
         ex.printStackTrace();
       }
-
+      ArrayList<Event> eventList=array; 
+      try {
+		SortedCSVtoText(eventList);
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+      
 
     }
   // converts sorted CSV file into text file to be used by plotting program
-  public static void SortedCSVtoText(ArrayList<Integer[]> a) throws FileNotFoundException{
+  public static void SortedCSVtoText(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("Lengths.txt"));
       StringBuilder sb = new StringBuilder();
       ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
       // append the parameter information to the text file
-      sb.append("Title Length of Events");
+      sb.append("Title Start-time vs End-time");
       sb.append('\n');
-      sb.append("xTitle Event");
+      sb.append("xTitle Start-time");
       sb.append('\n');
-      sb.append("yTitle Duration");
+      sb.append("yTitle End-time");
       sb.append('\n');
       sb.append("xLower 0");
       sb.append('\n');
-      sb.append("xUpper " + a.size());
+      sb.append("xUpper 1320000000000");
       sb.append('\n');
-      sb.append("xInterval 1");
+      sb.append("xInterval 100000000000");
       sb.append('\n');
-      sb.append("yLower "+ a.get(0)[1]);
+      sb.append("yLower 0");
       sb.append('\n');
-      sb.append("yUpper " + a.get(a.size()-1)[1]);
+      sb.append("yUpper 1330000000000");
       sb.append('\n');
-      sb.append("yInterval 1000000000");
+      sb.append("yInterval 100000000000");
       sb.append('\n');
       sb.append("Data");
       sb.append('\n');
 
       for (int x = 0; x < a.size(); x++) {
-          sb.append(x+1 + " " +  a.get(x)[1]);
+          sb.append((a.get(x)).getStartTime().getTime() + " " +  (a.get(x)).getEndTime().getTime());
           sb.append('\n');
 
       }

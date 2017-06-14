@@ -5,7 +5,6 @@ import java.util.Date;
 import java.sql.Timestamp;
 import java.lang.Object;
 import java.lang.Enum;
-import java.util.concurrent.TimeUnit;
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,14 +17,14 @@ public class CSVReader {
   public static ArrayList<Event> getDataFromCSVFile(String file){
     String csvFile = file;
     String line = "";
-    String cvsSplitBy = ",";
+    String csvSplitBy = ",";
     ArrayList<Event> array = new ArrayList<Event>();
     try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
         while ((line = br.readLine()) != null) {
 
             // use comma as separator
-            String[] event = line.split(cvsSplitBy);
+            String[] event = line.split(csvSplitBy);
             int id = Integer.parseInt(event[0]);
             Timestamp startTime = Timestamp.valueOf(event[1]);
             Timestamp endTime = Timestamp.valueOf(event[2]);

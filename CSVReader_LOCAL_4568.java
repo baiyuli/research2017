@@ -85,10 +85,7 @@ public class CSVReader {
     }};
 
   public static void main(String[] args) {
-      String fileName = args[0];
-      if(fileName.endsWith(".csv")){
-
-      ArrayList<Event> array = getDataFromCSVFile(fileName);
+      ArrayList<Event> array = getDataFromCSVFile("events.csv");
       toStringEvent(array);
       try {
         ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
@@ -104,15 +101,7 @@ public class CSVReader {
 	} catch (FileNotFoundException e) {
 		e.printStackTrace();
 	}
-<<<<<<< HEAD
 
-=======
-}
-else{
-  System.out.println("Choose a CSV file");
-}
-      
->>>>>>> 0b2d12517d582efa61248dcaf38dfc657ddfc7fc
 
     }
   // converts sorted CSV file into text file to be used by plotting program

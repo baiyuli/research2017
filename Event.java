@@ -1,11 +1,12 @@
 import java.sql.Timestamp;
+import java.lang.Object;
 
 /*
  * Event class that defines an event object, allowing for tracking of events
  * through event id's.
  * @author Carlos Salas Ortega, Baiyu Li, Gianna Wu
  */
-public class Event {
+public class Event{
 	int id, length;
 	Timestamp startTime, endTime;
 

@@ -1,4 +1,4 @@
-import java.io.*; 
+import java.io.*;
 import java.sql.Timestamp;
 import java.lang.Object;
 import java.lang.Enum;
@@ -7,6 +7,41 @@ import java.lang.String;
 
 public class CSVReader {
 	private ArrayList<Event> eventList;
+	private String[] columns = {"Event id 1", "Event id 2", "E1 meets E2", "E1 is met by E2"};
+	private static Hashtable<Integer, Event> table = new Hashtable<Integer, Event>();
+	private static ArrayList<Integer[]> alanAlgebraTable = new ArrayList<Integer[]>();
+
+
+	public static void constructAATable(ArrayList<Event> e) {
+		for (int x = 0; x < e.size() - 1; x++) {
+			for (int y = x + 1; y < e.size(); y++) {
+				Integer[] temp = new Integer[4];
+				temp[0] = e.get(x).getEventID();
+				temp[1] = e.get(y).getEventID();
+				alanAlgebraTable.add(temp);
+			}
+		}
+	}
+
+	public static void computeMeet() {
+		for (int x = 0; x < alanAlgebraTable.size(); x++) {
+			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
+			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
+
+			if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
+				alanAlgebraTable.get(x)[2] = 1;
+				alanAlgebraTable.get(x)[3] = 0;
+			}
+			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
+				alanAlgebraTable.get(x)[2] = 0;
+				alanAlgebraTable.get(x)[3] = 1;
+			}
+			else {
+				alanAlgebraTable.get(x)[3] = 0;
+				alanAlgebraTable.get(x)[2] = 0;
+			}
+		}
+	}
 
   public static ArrayList<Event> getDataFromCSVFile(String file){
     String csvFile = file;
@@ -24,6 +59,7 @@ public class CSVReader {
             Timestamp endTime = Timestamp.valueOf(event[2]);
             int length = (int)(endTime.getTime() - startTime.getTime());
             Event temp = new Event(id, startTime, endTime, length);
+						table.put(id, temp);
             array.add(temp);
 
         }
@@ -31,7 +67,6 @@ public class CSVReader {
     } catch (IOException e) {
         e.printStackTrace();
     }
-    data = new Object[array.size()][4];
     return array;
   }
 
@@ -89,10 +124,12 @@ public class CSVReader {
       if(fileName.endsWith(".csv")){
 
       ArrayList<Event> array = getDataFromCSVFile(fileName);
-      toStringEvent(array);
+      // toStringEvent(array);
       try {
         ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
-        toStringLengths(lengthArray);
+				constructAATable(array);
+				computeMeet();
+        toStringLengths(alanAlgebraTable);
         Collections.sort(lengthArray, lengthComparator);
 
       } catch (FileNotFoundException ex) {
@@ -104,15 +141,11 @@ public class CSVReader {
 	} catch (FileNotFoundException e) {
 		e.printStackTrace();
 	}
-<<<<<<< HEAD
-
-=======
 }
 else{
   System.out.println("Choose a CSV file");
 }
-      
->>>>>>> 0b2d12517d582efa61248dcaf38dfc657ddfc7fc
+
 
     }
   // converts sorted CSV file into text file to be used by plotting program

@@ -1,18 +1,12 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Date;
+import java.io.*; 
 import java.sql.Timestamp;
 import java.lang.Object;
 import java.lang.Enum;
 import java.util.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.lang.String;
 
 public class CSVReader {
-	private ArrayList<Event> eventList; 
+	private ArrayList<Event> eventList;
 
   public static ArrayList<Event> getDataFromCSVFile(String file){
     String csvFile = file;
@@ -37,6 +31,7 @@ public class CSVReader {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    data = new Object[array.size()][4];
     return array;
   }
 
@@ -96,18 +91,17 @@ public class CSVReader {
         ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
         toStringLengths(lengthArray);
         Collections.sort(lengthArray, lengthComparator);
-	     
+
       } catch (FileNotFoundException ex) {
         ex.printStackTrace();
       }
-      ArrayList<Event> eventList=array; 
+      ArrayList<Event> eventList=array;
       try {
 		SortedCSVtoText(eventList);
 	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-      
+
 
     }
   // converts sorted CSV file into text file to be used by plotting program

@@ -90,7 +90,10 @@ public class CSVReader {
     }};
 
   public static void main(String[] args) {
-      ArrayList<Event> array = getDataFromCSVFile("events.csv");
+      String fileName = args[0];
+      if(fileName.endsWith(".csv")){
+
+      ArrayList<Event> array = getDataFromCSVFile(fileName);
       toStringEvent(array);
       try {
         ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
@@ -107,6 +110,10 @@ public class CSVReader {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+}
+else{
+  System.out.println("Choose a CSV file");
+}
       
 
     }

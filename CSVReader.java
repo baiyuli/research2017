@@ -7,7 +7,9 @@ import java.lang.String;
 
 public class CSVReader {
 	private ArrayList<Event> eventList;
-	private String[] columns = {"Event id 1", "Event id 2", "E1 meets E2", "E1 is met by E2"};
+	private String[] columns = {"Event id X", "Event id Y", "X before Y", "X after Y", "X equal Y",
+															"X meets Y", "X is met by Y", "X overlaps Y", "X overlapped by Y",
+															"X during Y", "Y during X", "X starts Y", "X is started by Y", "X finishes Y", "X is finished by Y"};
 	private static Hashtable<Integer, Event> table = new Hashtable<Integer, Event>();
 	private static ArrayList<Integer[]> alanAlgebraTable = new ArrayList<Integer[]>();
 
@@ -15,10 +17,116 @@ public class CSVReader {
 	public static void constructAATable(ArrayList<Event> e) {
 		for (int x = 0; x < e.size() - 1; x++) {
 			for (int y = x + 1; y < e.size(); y++) {
-				Integer[] temp = new Integer[4];
+				Integer[] temp = new Integer[15];
 				temp[0] = e.get(x).getEventID();
 				temp[1] = e.get(y).getEventID();
 				alanAlgebraTable.add(temp);
+			}
+		}
+	}
+
+	// public static void computeAAComputations() {
+	// 	for (int x = 0; x < alanAlgebraTable.size(); x++) {
+	// 		Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
+	// 		Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
+	//
+	// 		if (temp0.getEndTime().compareTo(temp1.getStartTime()) < 0) {
+	// 			alanAlgebraTable.get(x)[2] = 1;
+	// 			alanAlgebraTable.get(x)[3] = 0;
+	// 		}
+	// 		else if (temp1.getEndTime().compareTo(temp0.getStartTime()) > 0) {
+	// 			alanAlgebraTable.get(x)[2] = 0;
+	// 			alanAlgebraTable.get(x)[3] = 1;
+	// 		}
+	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) == 0 &&
+	// 				temp0.getEndTime().compareTo(temp0.getEndTime()) == 0) {
+	// 			alanAlgebraTable.get(x)[4] = 1;
+	// 		}
+	// 		else if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
+	// 			alanAlgebraTable.get(x)[5] = 1;
+	// 			alanAlgebraTable.get(x)[6] = 0;
+	// 		}
+	// 		else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
+	// 			alanAlgebraTable.get(x)[5] = 0;
+	// 			alanAlgebraTable.get(x)[6] = 1;
+	// 		}
+	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) < 0 &&
+	// 				temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
+	// 			alanAlgebraTable.get(x)[7] = 1;
+	// 			alanAlgebraTable.get(x)[8] = 0;
+	// 		}
+	// 		else if (temp1.getStartTime().compareTo(temp0.getStartTime()) < 0 &&
+	// 						temp1.getEndTime().compareTo(temp0.getEndTime()) < 0) {
+	// 			alanAlgebraTable.get(x)[7] = 0;
+	// 			alanAlgebraTable.get(x)[8] = 1;
+	// 		}
+	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) > 0 &&
+	// 				temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
+	// 			alanAlgebraTable.get(x)[9] = 1;
+	// 			alanAlgebraTable.get(x)[10] = 0;
+	// 		}
+	// 		else if (temp1.getStartTime().compareTo(temp0.getStartTime()) > 0 &&
+	// 						temp1.getEndTime().compareTo(temp0.getEndTime()) < 0) {
+	// 			alanAlgebraTable.get(x)[9] = 0;
+	// 			alanAlgebraTable.get(x)[10] = 1;
+	// 		}
+	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) == 0 &&
+	// 				temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
+	// 			alanAlgebraTable.get(x)[11] = 1;
+	// 			alanAlgebraTable.get(x)[12] = 0;
+	// 		}
+	// 		else if (temp1.getStartTime().compareTo(temp0.getStartTime()) == 0 &&
+	// 						temp1.getEndTime().compareTo(temp0.getEndTime()) > 0) {
+	// 			alanAlgebraTable.get(x)[11] = 0;
+	// 			alanAlgebraTable.get(x)[12] = 1;
+	// 		}
+	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) < 0 &&
+	// 				temp0.getEndTime().compareTo(temp1.getEndTime()) == 0) {
+	// 			alanAlgebraTable.get(x)[13] = 1;
+	// 			alanAlgebraTable.get(x)[14] = 0;
+	// 		}
+	// 		else if (temp1.getStartTime().compareTo(temp0.getStartTime()) > 0 &&
+	// 						temp1.getEndTime().compareTo(temp0.getEndTime()) == 0) {
+	// 			alanAlgebraTable.get(x)[13] = 0;
+	// 			alanAlgebraTable.get(x)[14] = 1;
+	// 		}
+	// 		// else {
+	// 		// 	alanAlgebraTable.get(x)
+	// 		// }
+	// 	}
+	// }
+
+	public static void computeBefore() {
+		for (int x = 0; x < alanAlgebraTable.size(); x++) {
+			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
+			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
+
+			if (temp0.getEndTime().compareTo(temp1.getStartTime()) < 0) {
+				alanAlgebraTable.get(x)[2] = 1;
+				alanAlgebraTable.get(x)[3] = 0;
+			}
+			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) > 0) {
+				alanAlgebraTable.get(x)[2] = 0;
+				alanAlgebraTable.get(x)[3] = 1;
+			}
+			else {
+				alanAlgebraTable.get(x)[2] = 0;
+				alanAlgebraTable.get(x)[3] = 0;
+			}
+		}
+	}
+
+	public static void computeEqual() {
+		for (int x = 0; x < alanAlgebraTable.size(); x++) {
+			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
+			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
+
+			if (temp0.getStartTime().compareTo(temp1.getStartTime()) == 0 &&
+					temp0.getEndTime().compareTo(temp0.getEndTime()) == 0) {
+				alanAlgebraTable.get(x)[4] = 1;
+			}
+			else {
+				alanAlgebraTable.get(x)[4] = 0;
 			}
 		}
 	}
@@ -29,16 +137,104 @@ public class CSVReader {
 			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
 
 			if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
-				alanAlgebraTable.get(x)[2] = 1;
-				alanAlgebraTable.get(x)[3] = 0;
+				alanAlgebraTable.get(x)[5] = 1;
+				alanAlgebraTable.get(x)[6] = 0;
 			}
 			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
-				alanAlgebraTable.get(x)[2] = 0;
-				alanAlgebraTable.get(x)[3] = 1;
+				alanAlgebraTable.get(x)[5] = 0;
+				alanAlgebraTable.get(x)[6] = 1;
 			}
 			else {
-				alanAlgebraTable.get(x)[3] = 0;
-				alanAlgebraTable.get(x)[2] = 0;
+				alanAlgebraTable.get(x)[5] = 0;
+				alanAlgebraTable.get(x)[6] = 0;
+			}
+		}
+	}
+
+	public static void computeOverlaps() {
+		for (int x = 0; x < alanAlgebraTable.size(); x++) {
+			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
+			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
+
+			if (temp0.getStartTime().compareTo(temp1.getStartTime()) < 0 &&
+					temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
+				alanAlgebraTable.get(x)[7] = 1;
+				alanAlgebraTable.get(x)[8] = 0;
+			}
+			else if (temp1.getStartTime().compareTo(temp0.getStartTime()) < 0 &&
+							temp1.getEndTime().compareTo(temp0.getEndTime()) < 0) {
+				alanAlgebraTable.get(x)[7] = 0;
+				alanAlgebraTable.get(x)[8] = 1;
+			}
+			else {
+				alanAlgebraTable.get(x)[7] = 0;
+				alanAlgebraTable.get(x)[8] = 0;
+			}
+		}
+	}
+
+	public static void computeDuring() {
+		for (int x = 0; x < alanAlgebraTable.size(); x++) {
+			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
+			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
+
+			if (temp0.getStartTime().compareTo(temp1.getStartTime()) > 0 &&
+					temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
+				alanAlgebraTable.get(x)[9] = 1;
+				alanAlgebraTable.get(x)[10] = 0;
+			}
+			else if (temp1.getStartTime().compareTo(temp0.getStartTime()) > 0 &&
+							temp1.getEndTime().compareTo(temp0.getEndTime()) < 0) {
+				alanAlgebraTable.get(x)[9] = 0;
+				alanAlgebraTable.get(x)[10] = 1;
+			}
+			else {
+				alanAlgebraTable.get(x)[9] = 0;
+				alanAlgebraTable.get(x)[10] = 0;
+			}
+		}
+	}
+
+	public static void computeStarts() {
+		for (int x = 0; x < alanAlgebraTable.size(); x++) {
+			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
+			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
+
+			if (temp0.getStartTime().compareTo(temp1.getStartTime()) == 0 &&
+					temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
+				alanAlgebraTable.get(x)[11] = 1;
+				alanAlgebraTable.get(x)[12] = 0;
+			}
+			else if (temp1.getStartTime().compareTo(temp0.getStartTime()) == 0 &&
+							temp1.getEndTime().compareTo(temp0.getEndTime()) > 0) {
+				alanAlgebraTable.get(x)[11] = 0;
+				alanAlgebraTable.get(x)[12] = 1;
+			}
+			else {
+				alanAlgebraTable.get(x)[11] = 0;
+				alanAlgebraTable.get(x)[12] = 0;
+			}
+		}
+	}
+
+	public static void computeFinishes() {
+		for (int x = 0; x < alanAlgebraTable.size(); x++) {
+			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
+			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
+
+			if (temp0.getStartTime().compareTo(temp1.getStartTime()) < 0 &&
+					temp0.getEndTime().compareTo(temp1.getEndTime()) == 0) {
+				alanAlgebraTable.get(x)[13] = 1;
+				alanAlgebraTable.get(x)[14] = 0;
+			}
+			else if (temp1.getStartTime().compareTo(temp0.getStartTime()) > 0 &&
+							temp1.getEndTime().compareTo(temp0.getEndTime()) == 0) {
+				alanAlgebraTable.get(x)[13] = 0;
+				alanAlgebraTable.get(x)[14] = 1;
+			}
+			else {
+				alanAlgebraTable.get(x)[13] = 0;
+				alanAlgebraTable.get(x)[14] = 0;
 			}
 		}
 	}
@@ -128,7 +324,14 @@ public class CSVReader {
       try {
         ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
 				constructAATable(array);
+				// computeAAComputations();
+				computeBefore();
+				computeEqual();
 				computeMeet();
+				computeOverlaps();
+				computeDuring();
+				computeStarts();
+				computeFinishes();
         toStringLengths(alanAlgebraTable);
         Collections.sort(lengthArray, lengthComparator);
 

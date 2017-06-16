@@ -6,7 +6,7 @@ import java.util.*;
 import java.lang.String;
 
 public class CSVReader {
-	private ArrayList<Event> eventList;
+	// private ArrayList<Event> eventList = new ArrayList<Event>();
 	private String[] columns = {"Event id X", "Event id Y", "X before Y", "X after Y", "X equal Y",
 															"X meets Y", "X is met by Y", "X overlaps Y", "X overlapped by Y",
 															"X during Y", "Y during X", "X starts Y", "X is started by Y", "X finishes Y", "X is finished by Y"};
@@ -24,77 +24,6 @@ public class CSVReader {
 			}
 		}
 	}
-
-	// public static void computeAAComputations() {
-	// 	for (int x = 0; x < alanAlgebraTable.size(); x++) {
-	// 		Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
-	// 		Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
-	//
-	// 		if (temp0.getEndTime().compareTo(temp1.getStartTime()) < 0) {
-	// 			alanAlgebraTable.get(x)[2] = 1;
-	// 			alanAlgebraTable.get(x)[3] = 0;
-	// 		}
-	// 		else if (temp1.getEndTime().compareTo(temp0.getStartTime()) > 0) {
-	// 			alanAlgebraTable.get(x)[2] = 0;
-	// 			alanAlgebraTable.get(x)[3] = 1;
-	// 		}
-	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) == 0 &&
-	// 				temp0.getEndTime().compareTo(temp0.getEndTime()) == 0) {
-	// 			alanAlgebraTable.get(x)[4] = 1;
-	// 		}
-	// 		else if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
-	// 			alanAlgebraTable.get(x)[5] = 1;
-	// 			alanAlgebraTable.get(x)[6] = 0;
-	// 		}
-	// 		else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
-	// 			alanAlgebraTable.get(x)[5] = 0;
-	// 			alanAlgebraTable.get(x)[6] = 1;
-	// 		}
-	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) < 0 &&
-	// 				temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
-	// 			alanAlgebraTable.get(x)[7] = 1;
-	// 			alanAlgebraTable.get(x)[8] = 0;
-	// 		}
-	// 		else if (temp1.getStartTime().compareTo(temp0.getStartTime()) < 0 &&
-	// 						temp1.getEndTime().compareTo(temp0.getEndTime()) < 0) {
-	// 			alanAlgebraTable.get(x)[7] = 0;
-	// 			alanAlgebraTable.get(x)[8] = 1;
-	// 		}
-	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) > 0 &&
-	// 				temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
-	// 			alanAlgebraTable.get(x)[9] = 1;
-	// 			alanAlgebraTable.get(x)[10] = 0;
-	// 		}
-	// 		else if (temp1.getStartTime().compareTo(temp0.getStartTime()) > 0 &&
-	// 						temp1.getEndTime().compareTo(temp0.getEndTime()) < 0) {
-	// 			alanAlgebraTable.get(x)[9] = 0;
-	// 			alanAlgebraTable.get(x)[10] = 1;
-	// 		}
-	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) == 0 &&
-	// 				temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
-	// 			alanAlgebraTable.get(x)[11] = 1;
-	// 			alanAlgebraTable.get(x)[12] = 0;
-	// 		}
-	// 		else if (temp1.getStartTime().compareTo(temp0.getStartTime()) == 0 &&
-	// 						temp1.getEndTime().compareTo(temp0.getEndTime()) > 0) {
-	// 			alanAlgebraTable.get(x)[11] = 0;
-	// 			alanAlgebraTable.get(x)[12] = 1;
-	// 		}
-	// 		else if (temp0.getStartTime().compareTo(temp1.getStartTime()) < 0 &&
-	// 				temp0.getEndTime().compareTo(temp1.getEndTime()) == 0) {
-	// 			alanAlgebraTable.get(x)[13] = 1;
-	// 			alanAlgebraTable.get(x)[14] = 0;
-	// 		}
-	// 		else if (temp1.getStartTime().compareTo(temp0.getStartTime()) > 0 &&
-	// 						temp1.getEndTime().compareTo(temp0.getEndTime()) == 0) {
-	// 			alanAlgebraTable.get(x)[13] = 0;
-	// 			alanAlgebraTable.get(x)[14] = 1;
-	// 		}
-	// 		// else {
-	// 		// 	alanAlgebraTable.get(x)
-	// 		// }
-	// 	}
-	// }
 
 	public static void computeBefore() {
 		for (int x = 0; x < alanAlgebraTable.size(); x++) {
@@ -131,7 +60,8 @@ public class CSVReader {
 		}
 	}
 
-	public static void computeMeet() {
+	public static ArrayList<Integer[]> computeMeet() {
+		ArrayList<Integer[]> a = new ArrayList<Integer[]>();
 		for (int x = 0; x < alanAlgebraTable.size(); x++) {
 			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
 			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
@@ -139,16 +69,22 @@ public class CSVReader {
 			if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
 				alanAlgebraTable.get(x)[5] = 1;
 				alanAlgebraTable.get(x)[6] = 0;
+				Integer[] arr = {temp0.getEventID(), temp1.getEventID(), (int)(temp1.getEndTime().getTime())};
+				a.add(arr);
+
 			}
 			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
 				alanAlgebraTable.get(x)[5] = 0;
 				alanAlgebraTable.get(x)[6] = 1;
+				Integer[] arr = {temp1.getEventID(), temp0.getEventID(), (int)(temp0.getEndTime().getTime())};
+				a.add(arr);
 			}
 			else {
 				alanAlgebraTable.get(x)[5] = 0;
 				alanAlgebraTable.get(x)[6] = 0;
 			}
 		}
+		return a;
 	}
 
 	public static void computeOverlaps() {
@@ -268,7 +204,7 @@ public class CSVReader {
 
     //creates a csv file of the event ID and event lengths. it also returns an
     // ArrayList<String> object that contains the event ID and the event lengths
-    public static ArrayList<Integer[]> lengthsToCSVFile(ArrayList<Event> a) throws FileNotFoundException{
+    public static ArrayList<Integer[]> computeLengths(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("test.csv"));
       StringBuilder sb = new StringBuilder();
       ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
@@ -278,7 +214,7 @@ public class CSVReader {
           String length = Long.toString(a.get(x).getLength());
           sb.append(length);
           sb.append('\n');
-          Integer[] arr = {a.get(x).getEventID(), a.get(x).getLength()};
+          Integer[] arr = {a.get(x).getEventID(), a.get(x).getEventID(), a.get(x).getLength()};
           arrayOfLengths.add(arr);
       }
       pw.write(sb.toString());
@@ -286,7 +222,7 @@ public class CSVReader {
       return arrayOfLengths;
     }
 
-  public static void toStringLengths(ArrayList<Integer[]> array) {
+  public static void toStringComputations(ArrayList<Integer[]> array) {
     for (int x = 0; x < array.size(); x++) {
       for (int y = 0; y < array.get(x).length; y++) {
         System.out.print(array.get(x)[y] + " ");
@@ -307,11 +243,11 @@ public class CSVReader {
 
 
   /*Comparator for sorting the list by Student Name*/
- public static Comparator<Integer[]> lengthComparator = new Comparator<Integer[]>() {
+ public static Comparator<Integer[]> comparator = new Comparator<Integer[]>() {
 
 	public int compare(Integer[] s1, Integer[] s2) {
 	   //ascending order
-	   return s1[1] - s2[1];
+	   return s1[2] - s2[2];
 
     }};
 
@@ -320,20 +256,32 @@ public class CSVReader {
       if(fileName.endsWith(".csv")){
 
       ArrayList<Event> array = getDataFromCSVFile(fileName);
-      // toStringEvent(array);
       try {
-        ArrayList<Integer[]> lengthArray = lengthsToCSVFile (array);
 				constructAATable(array);
-				// computeAAComputations();
-				computeBefore();
-				computeEqual();
-				computeMeet();
-				computeOverlaps();
-				computeDuring();
-				computeStarts();
-				computeFinishes();
-        toStringLengths(alanAlgebraTable);
-        Collections.sort(lengthArray, lengthComparator);
+				// computeBefore();
+				// computeEqual();
+				// computeMeet();
+				// computeOverlaps();
+				// computeDuring();
+				// computeStarts();
+				// computeFinishes();
+				String computation = args[1];
+				if (computation.equals("lengths")) {
+					System.out.println("Events and their lengths (unsorted): ");
+					ArrayList<Integer[]> lengthArray = computeLengths(array);
+					toStringComputations(lengthArray);
+					System.out.println("Events and their lengths (sorted): ");
+					Collections.sort(lengthArray, comparator);
+					toStringComputations(lengthArray);
+				}
+				else if (computation.equals("meets")) {
+					System.out.println("Events and their meet times (unsorted): ");
+					ArrayList<Integer[]> meetArray = computeMeet();
+					toStringComputations(meetArray);
+					System.out.println("Events and their meet times (sorted): ");
+					Collections.sort(meetArray, comparator);
+					toStringComputations(meetArray);
+				}
 
       } catch (FileNotFoundException ex) {
         ex.printStackTrace();

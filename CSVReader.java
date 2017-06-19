@@ -10,14 +10,14 @@ public class CSVReader {
 	private String[] columns = {"Event id X", "Event id Y", "X before Y", "X after Y", "X equal Y",
 															"X meets Y", "X is met by Y", "X overlaps Y", "X overlapped by Y",
 															"X during Y", "Y during X", "X starts Y", "X is started by Y", "X finishes Y", "X is finished by Y"};
-	private static Hashtable<Integer, Event> table = new Hashtable<Integer, Event>();
-	private static ArrayList<Integer[]> alanAlgebraTable = new ArrayList<Integer[]>();
+	private static Hashtable<Long, Event> table = new Hashtable<Long, Event>();
+	private static ArrayList<Long[]> alanAlgebraTable = new ArrayList<Long[]>();
 
 
 	public static void constructAATable(ArrayList<Event> e) {
 		for (int x = 0; x < e.size() - 1; x++) {
 			for (int y = x + 1; y < e.size(); y++) {
-				Integer[] temp = new Integer[15];
+				Long[] temp = new Long[15];
 				temp[0] = e.get(x).getEventID();
 				temp[1] = e.get(y).getEventID();
 				alanAlgebraTable.add(temp);
@@ -60,8 +60,8 @@ public class CSVReader {
 		}
 	}
 
-	public static ArrayList<Integer[]> computeMeet() {
-		ArrayList<Integer[]> a = new ArrayList<Integer[]>();
+	public static ArrayList<String[]> computeMeet() {
+		ArrayList<String[]> a = new ArrayList<String[]>();
 		for (int x = 0; x < alanAlgebraTable.size(); x++) {
 			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
 			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
@@ -69,14 +69,14 @@ public class CSVReader {
 			if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
 				alanAlgebraTable.get(x)[5] = 1;
 				alanAlgebraTable.get(x)[6] = 0;
-				Integer[] arr = {temp0.getEventID(), temp1.getEventID(), (int)(temp1.getEndTime().getTime())};
+				String[] arr = {temp0.getEventID() + "", temp1.getEventID() + "", temp1.getEndTime() + ""};
 				a.add(arr);
 
 			}
 			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
 				alanAlgebraTable.get(x)[5] = 0;
 				alanAlgebraTable.get(x)[6] = 1;
-				Integer[] arr = {temp1.getEventID(), temp0.getEventID(), (int)(temp0.getEndTime().getTime())};
+				String[] arr = {temp1.getEventID() + "", temp0.getEventID() + "", temp0.getEndTime() + ""};
 				a.add(arr);
 			}
 			else {
@@ -186,7 +186,7 @@ public class CSVReader {
 
             // use comma as separator
             String[] event = line.split(csvSplitBy);
-            int id = Integer.parseInt(event[0]);
+            int id = Long.parseInt(event[0]);
             Timestamp startTime = Timestamp.valueOf(event[1]);
             Timestamp endTime = Timestamp.valueOf(event[2]);
             int length = (int)(endTime.getTime() - startTime.getTime());
@@ -204,17 +204,17 @@ public class CSVReader {
 
     //creates a csv file of the event ID and event lengths. it also returns an
     // ArrayList<String> object that contains the event ID and the event lengths
-    public static ArrayList<Integer[]> computeLengths(ArrayList<Event> a) throws FileNotFoundException{
+    public static ArrayList<Long[]> computeLengths(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("test.csv"));
       StringBuilder sb = new StringBuilder();
-      ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
+      ArrayList<Long[]> arrayOfLengths = new ArrayList<Long[]>();
       for (int x = 0; x < a.size(); x++) {
           sb.append(a.get(x).getEventID());
           sb.append(',');
           String length = Long.toString(a.get(x).getLength());
           sb.append(length);
           sb.append('\n');
-          Integer[] arr = {a.get(x).getEventID(), a.get(x).getEventID(), a.get(x).getLength()};
+          Long[] arr = {a.get(x).getEventID(), a.get(x).getEventID(), a.get(x).getLength()};
           arrayOfLengths.add(arr);
       }
       pw.write(sb.toString());
@@ -222,7 +222,7 @@ public class CSVReader {
       return arrayOfLengths;
     }
 
-  public static void toStringComputations(ArrayList<Integer[]> array) {
+  public static void toStringComputations(ArrayList<Long[]> array) {
     for (int x = 0; x < array.size(); x++) {
       for (int y = 0; y < array.get(x).length; y++) {
         System.out.print(array.get(x)[y] + " ");
@@ -230,6 +230,15 @@ public class CSVReader {
       System.out.println();
     }
   }
+
+	public static void toStringComputations2(ArrayList<String[]> array) {
+		for (int x = 0; x < array.size(); x++) {
+			for (int y = 0; y < array.get(x).length; y++) {
+				System.out.print(array.get(x)[y] + " ");
+			}
+			System.out.println();
+		}
+	}
 
   public static void toStringEvent(ArrayList<Event> a) {
     for (int x = 0; x < a.size(); x++) {
@@ -241,11 +250,16 @@ public class CSVReader {
     }
   }
 
+public static Comparator<String[]> compString = new Comparator<String[]>() {
+	public int compare(String[] s1, String[] s2) {
+		return s1[2].compareTo(s2[2]);
+	}
+};
 
-  /*Comparator for sorting the list by Student Name*/
- public static Comparator<Integer[]> comparator = new Comparator<Integer[]>() {
 
-	public int compare(Integer[] s1, Integer[] s2) {
+ public static Comparator<Long[]> comparator = new Comparator<Long[]>() {
+
+	public int compare(Long[] s1, Long[] s2) {
 	   //ascending order
 	   return s1[2] - s2[2];
 
@@ -268,7 +282,7 @@ public class CSVReader {
 				String computation = args[1];
 				if (computation.equals("lengths")) {
 					System.out.println("Events and their lengths (unsorted): ");
-					ArrayList<Integer[]> lengthArray = computeLengths(array);
+					ArrayList<Long[]> lengthArray = computeLengths(array);
 					toStringComputations(lengthArray);
 					System.out.println("Events and their lengths (sorted): ");
 					Collections.sort(lengthArray, comparator);
@@ -276,11 +290,11 @@ public class CSVReader {
 				}
 				else if (computation.equals("meets")) {
 					System.out.println("Events and their meet times (unsorted): ");
-					ArrayList<Integer[]> meetArray = computeMeet();
-					toStringComputations(meetArray);
+					ArrayList<String[]> meetArray = computeMeet();
+					toStringComputations2(meetArray);
 					System.out.println("Events and their meet times (sorted): ");
-					Collections.sort(meetArray, comparator);
-					toStringComputations(meetArray);
+					Collections.sort(meetArray, compString);
+					toStringComputations2(meetArray);
 				}
 
       } catch (FileNotFoundException ex) {
@@ -303,7 +317,7 @@ else{
   public static void SortedCSVtoText(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("Lengths.txt"));
       StringBuilder sb = new StringBuilder();
-      ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
+      ArrayList<Long[]> arrayOfLengths = new ArrayList<Long[]>();
       // append the parameter information to the text file
       sb.append("Title Start-time vs End-time");
       sb.append('\n');

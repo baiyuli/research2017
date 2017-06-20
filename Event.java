@@ -7,10 +7,11 @@ import java.lang.Object;
  * @author Carlos Salas Ortega, Baiyu Li, Gianna Wu
  */
 public class Event{
-	int id, length;
+	int id;
+	long length;
 	Timestamp startTime, endTime;
 
-	public Event(int id, Timestamp startTime,Timestamp endTime, int length){
+	public Event(int id, Timestamp startTime,Timestamp endTime, long length){
 		this.id 	 		 = id;
 		this.startTime = startTime;
 		this.endTime   = endTime;
@@ -29,7 +30,7 @@ public class Event{
 		return endTime;
 	}
 
-	int getLength(){
+	long getLength(){
 		return length;
 	}
 

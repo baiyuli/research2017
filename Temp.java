@@ -25,202 +25,6 @@ public class Temp {
 		}
 	}
 
-	public static void computeBefore() {
-		for (int x = 0; x < alanAlgebraTable.size(); x++) {
-			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
-			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
-
-			if (temp0.getEndTime().compareTo(temp1.getStartTime()) < 0) {
-				alanAlgebraTable.get(x)[2] = 1;
-				alanAlgebraTable.get(x)[3] = 0;
-			}
-			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) > 0) {
-				alanAlgebraTable.get(x)[2] = 0;
-				alanAlgebraTable.get(x)[3] = 1;
-			}
-			else {
-				alanAlgebraTable.get(x)[2] = 0;
-				alanAlgebraTable.get(x)[3] = 0;
-			}
-		}
-	}
-
-	public static void computeEqual() {
-		for (int x = 0; x < alanAlgebraTable.size(); x++) {
-			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
-			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
-
-			if (temp0.getStartTime().compareTo(temp1.getStartTime()) == 0 &&
-					temp0.getEndTime().compareTo(temp0.getEndTime()) == 0) {
-				alanAlgebraTable.get(x)[4] = 1;
-			}
-			else {
-				alanAlgebraTable.get(x)[4] = 0;
-			}
-		}
-	}
-
-	public static ArrayList<String[]> computeMeet() {
-		ArrayList<String[]> a = new ArrayList<String[]>();
-		for (int x = 0; x < alanAlgebraTable.size(); x++) {
-			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
-			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
-
-			if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
-				alanAlgebraTable.get(x)[5] = 1;
-				alanAlgebraTable.get(x)[6] = 0;
-				String[] arr = {temp0.getEventID() + "", temp1.getEventID() + "", temp0.getEndTime() + ""};
-				a.add(arr);
-
-			}
-			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
-				alanAlgebraTable.get(x)[5] = 0;
-				alanAlgebraTable.get(x)[6] = 1;
-				String[] arr = {temp1.getEventID()  + "", temp0.getEventID()  + "", temp1.getEndTime() + ""};
-				a.add(arr);
-			}
-			else {
-				alanAlgebraTable.get(x)[5] = 0;
-				alanAlgebraTable.get(x)[6] = 0;
-			}
-		}
-		return a;
-	}
-
-	public static void computeOverlaps() {
-		for (int x = 0; x < alanAlgebraTable.size(); x++) {
-			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
-			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
-
-			if (temp0.getStartTime().compareTo(temp1.getStartTime()) < 0 &&
-					temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
-				alanAlgebraTable.get(x)[7] = 1;
-				alanAlgebraTable.get(x)[8] = 0;
-			}
-			else if (temp1.getStartTime().compareTo(temp0.getStartTime()) < 0 &&
-							temp1.getEndTime().compareTo(temp0.getEndTime()) < 0) {
-				alanAlgebraTable.get(x)[7] = 0;
-				alanAlgebraTable.get(x)[8] = 1;
-			}
-			else {
-				alanAlgebraTable.get(x)[7] = 0;
-				alanAlgebraTable.get(x)[8] = 0;
-			}
-		}
-	}
-
-	public static void computeDuring() {
-		for (int x = 0; x < alanAlgebraTable.size(); x++) {
-			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
-			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
-
-			if (temp0.getStartTime().compareTo(temp1.getStartTime()) > 0 &&
-					temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
-				alanAlgebraTable.get(x)[9] = 1;
-				alanAlgebraTable.get(x)[10] = 0;
-			}
-			else if (temp1.getStartTime().compareTo(temp0.getStartTime()) > 0 &&
-							temp1.getEndTime().compareTo(temp0.getEndTime()) < 0) {
-				alanAlgebraTable.get(x)[9] = 0;
-				alanAlgebraTable.get(x)[10] = 1;
-			}
-			else {
-				alanAlgebraTable.get(x)[9] = 0;
-				alanAlgebraTable.get(x)[10] = 0;
-			}
-		}
-	}
-
-	public static void computeStarts() {
-		for (int x = 0; x < alanAlgebraTable.size(); x++) {
-			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
-			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
-
-			if (temp0.getStartTime().compareTo(temp1.getStartTime()) == 0 &&
-					temp0.getEndTime().compareTo(temp1.getEndTime()) < 0) {
-				alanAlgebraTable.get(x)[11] = 1;
-				alanAlgebraTable.get(x)[12] = 0;
-			}
-			else if (temp1.getStartTime().compareTo(temp0.getStartTime()) == 0 &&
-							temp1.getEndTime().compareTo(temp0.getEndTime()) > 0) {
-				alanAlgebraTable.get(x)[11] = 0;
-				alanAlgebraTable.get(x)[12] = 1;
-			}
-			else {
-				alanAlgebraTable.get(x)[11] = 0;
-				alanAlgebraTable.get(x)[12] = 0;
-			}
-		}
-	}
-
-	public static void computeFinishes() {
-		for (int x = 0; x < alanAlgebraTable.size(); x++) {
-			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
-			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
-
-			if (temp0.getStartTime().compareTo(temp1.getStartTime()) < 0 &&
-					temp0.getEndTime().compareTo(temp1.getEndTime()) == 0) {
-				alanAlgebraTable.get(x)[13] = 1;
-				alanAlgebraTable.get(x)[14] = 0;
-			}
-			else if (temp1.getStartTime().compareTo(temp0.getStartTime()) > 0 &&
-							temp1.getEndTime().compareTo(temp0.getEndTime()) == 0) {
-				alanAlgebraTable.get(x)[13] = 0;
-				alanAlgebraTable.get(x)[14] = 1;
-			}
-			else {
-				alanAlgebraTable.get(x)[13] = 0;
-				alanAlgebraTable.get(x)[14] = 0;
-			}
-		}
-	}
-
-  public static ArrayList<Event> getDataFromCSVFile(String file){
-    String csvFile = file;
-    String line = "";
-    String csvSplitBy = ",";
-    ArrayList<Event> array = new ArrayList<Event>();
-    try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-
-        while ((line = br.readLine()) != null) {
-
-            // use comma as separator
-            String[] event = line.split(csvSplitBy);
-            int id = Integer.parseInt(event[0]);
-            Timestamp startTime = Timestamp.valueOf(event[1]);
-            Timestamp endTime = Timestamp.valueOf(event[2]);
-            int length = (int)(endTime.getTime() - startTime.getTime());
-            Event temp = new Event(id, startTime, endTime, length);
-						table.put(id, temp);
-            array.add(temp);
-
-        }
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    return array;
-  }
-
-    //creates a csv file of the event ID and event lengths. it also returns an
-    // ArrayList<String> object that contains the event ID and the event lengths
-    public static ArrayList<String[]> computeLengths(ArrayList<Event> a) throws FileNotFoundException{
-      PrintWriter pw = new PrintWriter(new File("test.csv"));
-      StringBuilder sb = new StringBuilder();
-      ArrayList<String[]> arrayOfLengths = new ArrayList<String[]>();
-      for (int x = 0; x < a.size(); x++) {
-          sb.append(a.get(x).getEventID());
-          sb.append(',');
-          String length = Long.toString(a.get(x).getLength());
-          sb.append(length);
-          sb.append('\n');
-          String[] arr = {a.get(x).getEventID() + "", a.get(x).getEventID() + "", length};
-          arrayOfLengths.add(arr);
-      }
-      pw.write(sb.toString());
-      pw.close();
-      return arrayOfLengths;
-    }
 
   public static void toStringComputations(ArrayList<Integer[]> array) {
     for (int x = 0; x < array.size(); x++) {
@@ -250,6 +54,33 @@ public class Temp {
     }
   }
 
+  public static ArrayList<Event> getDataFromCSVFile(String file){
+    String csvFile = file;
+    String line = "";
+    String csvSplitBy = ",";
+    ArrayList<Event> array = new ArrayList<Event>();
+    try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+        while ((line = br.readLine()) != null) {
+
+            // use comma as separator
+            String[] event = line.split(csvSplitBy);
+            int id = Integer.parseInt(event[0]);
+            Timestamp startTime = Timestamp.valueOf(event[1]);
+            Timestamp endTime = Timestamp.valueOf(event[2]);
+            long length = endTime.getTime() - startTime.getTime();
+            Event temp = new Event(id, startTime, endTime, length);
+            table.put(id, temp);
+            array.add(temp);
+
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return array;
+  }
+
 
   /*Comparator for sorting the list by Student Name*/
 	public static Comparator<String[]> compString = new Comparator<String[]>() {
@@ -260,63 +91,27 @@ public class Temp {
 
      }};
 
- public static Comparator<Integer[]> comparator = new Comparator<Integer[]>() {
+ public static Comparator<Event> compEvent = new Comparator<Event>() {
 
-	public int compare(Integer[] s1, Integer[] s2) {
+	public int compare(Event e1, Event e2) {
 	   //ascending order
-	   return s1[2] - s2[2];
+	   return e1.getStartTime().compareTo(e2.getStartTime());
 
     }};
 
   public static void main(String[] args) {
-      String fileName = args[0];
-      if(fileName.endsWith(".csv")){
+    String fileName = args[0];
+    if(fileName.endsWith(".csv")){
 
-      ArrayList<Event> array = getDataFromCSVFile(fileName);
-      try {
-				constructAATable(array);
-				// computeBefore();
-				// computeEqual();
-				// computeMeet();
-				// computeOverlaps();
-				// computeDuring();
-				// computeStarts();
-				// computeFinishes();
-				String computation = args[1];
-				if (computation.equals("lengths")) {
-					System.out.println("Events and their lengths (unsorted): ");
-					ArrayList<String[]> lengthArray = computeLengths(array);
-					toStringComputations2(lengthArray);
-					System.out.println("Events and their lengths (sorted): ");
-					Collections.sort(lengthArray, compString);
-					toStringComputations2(lengthArray);
-				}
-				else if (computation.equals("meets")) {
-					System.out.println("Events and their meet times (unsorted): ");
-					ArrayList<String[]> meetArray = computeMeet();
-					toStringComputations2(meetArray);
-					System.out.println("Events and their meet times (sorted): ");
-					Collections.sort(meetArray, compString);
-					toStringComputations2(meetArray);
-				}
-				toStringComputations(alanAlgebraTable);
-
-      } catch (FileNotFoundException ex) {
-        ex.printStackTrace();
-      }
-      ArrayList<Event> eventList=array;
-      try {
-		SortedCSVtoText(eventList);
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	}
-}
-else{
-  System.out.println("Choose a CSV file");
-}
-
-
+      ArrayList<Event> eventArray = getDataFromCSVFile(fileName);
+      ArrayList<Event> sortedArrayByST = eventArray;
+      Collections.sort(sortedArrayByST, compEvent);
+      toStringEvent(sortedArrayByST);
     }
+    else{
+      System.out.println("Choose a CSV file");
+    }
+  }
   // converts sorted CSV file into text file to be used by plotting program
   public static void SortedCSVtoText(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("Lengths.txt"));

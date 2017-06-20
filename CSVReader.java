@@ -77,6 +77,7 @@ public class CSVReader {
 			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
 				alanAlgebraTable.get(x)[5] = 0;
 				alanAlgebraTable.get(x)[6] = 1;
+
 				String[] arr = {temp1.getEventID()  + "", temp0.getEventID()  + "", temp1.getEndTime() + ""};
 				a.add(arr);
 			}
@@ -253,7 +254,6 @@ public class CSVReader {
   }
 
 
-  /*Comparator for sorting the list by Student Name*/
 	public static Comparator<String[]> compString = new Comparator<String[]>() {
 
  	public int compare(String[] s1, String[] s2) {

@@ -265,10 +265,6 @@ public class CSVReader {
 
  public static Comparator<Integer[]> comparator = new Comparator<Integer[]>() {
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 335e4b60753ab90df2b089ab0138d94b5d9f7489
 	public int compare(Integer[] s1, Integer[] s2) {
 	   //ascending order
 	   return s1[2] - s2[2];

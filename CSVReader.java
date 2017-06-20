@@ -10,14 +10,14 @@ public class CSVReader {
 	private String[] columns = {"Event id X", "Event id Y", "X before Y", "X after Y", "X equal Y",
 															"X meets Y", "X is met by Y", "X overlaps Y", "X overlapped by Y",
 															"X during Y", "Y during X", "X starts Y", "X is started by Y", "X finishes Y", "X is finished by Y"};
-	private static Hashtable<Long, Event> table = new Hashtable<Long, Event>();
-	private static ArrayList<Long[]> alanAlgebraTable = new ArrayList<Long[]>();
+	private static Hashtable<Integer, Event> table = new Hashtable<Integer, Event>();
+	private static ArrayList<Integer[]> alanAlgebraTable = new ArrayList<Integer[]>();
 
 
 	public static void constructAATable(ArrayList<Event> e) {
 		for (int x = 0; x < e.size() - 1; x++) {
 			for (int y = x + 1; y < e.size(); y++) {
-				Long[] temp = new Long[15];
+				Integer[] temp = new Integer[15];
 				temp[0] = e.get(x).getEventID();
 				temp[1] = e.get(y).getEventID();
 				alanAlgebraTable.add(temp);
@@ -69,14 +69,14 @@ public class CSVReader {
 			if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
 				alanAlgebraTable.get(x)[5] = 1;
 				alanAlgebraTable.get(x)[6] = 0;
-				String[] arr = {temp0.getEventID() + "", temp1.getEventID() + "", temp1.getEndTime() + ""};
+				String[] arr = {temp0.getEventID() + "", temp1.getEventID() + "", temp0.getEndTime() + ""};
 				a.add(arr);
 
 			}
 			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
 				alanAlgebraTable.get(x)[5] = 0;
 				alanAlgebraTable.get(x)[6] = 1;
-				String[] arr = {temp1.getEventID() + "", temp0.getEventID() + "", temp0.getEndTime() + ""};
+				String[] arr = {temp1.getEventID()  + "", temp0.getEventID()  + "", temp1.getEndTime() + ""};
 				a.add(arr);
 			}
 			else {
@@ -186,7 +186,7 @@ public class CSVReader {
 
             // use comma as separator
             String[] event = line.split(csvSplitBy);
-            int id = Long.parseInt(event[0]);
+            int id = Integer.parseInt(event[0]);
             Timestamp startTime = Timestamp.valueOf(event[1]);
             Timestamp endTime = Timestamp.valueOf(event[2]);
             int length = (int)(endTime.getTime() - startTime.getTime());
@@ -204,17 +204,17 @@ public class CSVReader {
 
     //creates a csv file of the event ID and event lengths. it also returns an
     // ArrayList<String> object that contains the event ID and the event lengths
-    public static ArrayList<Long[]> computeLengths(ArrayList<Event> a) throws FileNotFoundException{
+    public static ArrayList<String[]> computeLengths(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("test.csv"));
       StringBuilder sb = new StringBuilder();
-      ArrayList<Long[]> arrayOfLengths = new ArrayList<Long[]>();
+      ArrayList<String[]> arrayOfLengths = new ArrayList<String[]>();
       for (int x = 0; x < a.size(); x++) {
           sb.append(a.get(x).getEventID());
           sb.append(',');
           String length = Long.toString(a.get(x).getLength());
           sb.append(length);
           sb.append('\n');
-          Long[] arr = {a.get(x).getEventID(), a.get(x).getEventID(), a.get(x).getLength()};
+          String[] arr = {a.get(x).getEventID() + "", a.get(x).getEventID() + "", length};
           arrayOfLengths.add(arr);
       }
       pw.write(sb.toString());
@@ -222,7 +222,7 @@ public class CSVReader {
       return arrayOfLengths;
     }
 
-  public static void toStringComputations(ArrayList<Long[]> array) {
+  public static void toStringComputations(ArrayList<Integer[]> array) {
     for (int x = 0; x < array.size(); x++) {
       for (int y = 0; y < array.get(x).length; y++) {
         System.out.print(array.get(x)[y] + " ");
@@ -250,16 +250,19 @@ public class CSVReader {
     }
   }
 
-public static Comparator<String[]> compString = new Comparator<String[]>() {
-	public int compare(String[] s1, String[] s2) {
-		return s1[2].compareTo(s2[2]);
-	}
-};
 
+  /*Comparator for sorting the list by Student Name*/
+	public static Comparator<String[]> compString = new Comparator<String[]>() {
 
- public static Comparator<Long[]> comparator = new Comparator<Long[]>() {
+ 	public int compare(String[] s1, String[] s2) {
+ 	   //ascending order
+ 	   return s1[2].compareTo(s2[2]);
 
-	public int compare(Long[] s1, Long[] s2) {
+     }};
+
+ public static Comparator<Integer[]> comparator = new Comparator<Integer[]>() {
+
+	public int compare(Integer[] s1, Integer[] s2) {
 	   //ascending order
 	   return s1[2] - s2[2];
 
@@ -282,11 +285,11 @@ public static Comparator<String[]> compString = new Comparator<String[]>() {
 				String computation = args[1];
 				if (computation.equals("lengths")) {
 					System.out.println("Events and their lengths (unsorted): ");
-					ArrayList<Long[]> lengthArray = computeLengths(array);
-					toStringComputations(lengthArray);
+					ArrayList<String[]> lengthArray = computeLengths(array);
+					toStringComputations2(lengthArray);
 					System.out.println("Events and their lengths (sorted): ");
-					Collections.sort(lengthArray, comparator);
-					toStringComputations(lengthArray);
+					Collections.sort(lengthArray, compString);
+					toStringComputations2(lengthArray);
 				}
 				else if (computation.equals("meets")) {
 					System.out.println("Events and their meet times (unsorted): ");
@@ -296,6 +299,7 @@ public static Comparator<String[]> compString = new Comparator<String[]>() {
 					Collections.sort(meetArray, compString);
 					toStringComputations2(meetArray);
 				}
+				toStringComputations(alanAlgebraTable);
 
       } catch (FileNotFoundException ex) {
         ex.printStackTrace();
@@ -317,7 +321,7 @@ else{
   public static void SortedCSVtoText(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("Lengths.txt"));
       StringBuilder sb = new StringBuilder();
-      ArrayList<Long[]> arrayOfLengths = new ArrayList<Long[]>();
+      ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
       // append the parameter information to the text file
       sb.append("Title Start-time vs End-time");
       sb.append('\n');

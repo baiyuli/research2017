@@ -70,6 +70,7 @@ public class CSVReader {
 				alanAlgebraTable.get(x)[5] = 1;
 				alanAlgebraTable.get(x)[6] = 0;
 				String[] arr = {temp0.getEventID() + "", temp1.getEventID() + "", temp0.getEndTime() + ""};
+
 				a.add(arr);
 
 			}
@@ -204,6 +205,7 @@ public class CSVReader {
 
     //creates a csv file of the event ID and event lengths. it also returns an
     // ArrayList<String> object that contains the event ID and the event lengths
+
     public static ArrayList<String[]> computeLengths(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("test.csv"));
       StringBuilder sb = new StringBuilder();

@@ -272,6 +272,8 @@ public class CSVReader {
     }};
 
   public static void main(String[] args) {
+      long startTime = System.nanoTime();
+
       String fileName = args[0];
       if(fileName.endsWith(".csv")){
 
@@ -319,8 +321,9 @@ public class CSVReader {
 else{
   System.out.println("Choose a CSV file");
 }
-
-
+    long endTime   = System.nanoTime();
+    long totalTime = endTime - startTime; // Total duration of program 
+    System.out.println("Run time is: " + totalTime + " nanoseconds");
     }
   // converts sorted CSV file into text file to be used by plotting program
   public static void SortedCSVtoText(ArrayList<Event> a) throws FileNotFoundException{

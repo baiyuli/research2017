@@ -77,8 +77,8 @@ public class CSVReader {
 			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
 				alanAlgebraTable.get(x)[5] = 0;
 				alanAlgebraTable.get(x)[6] = 1;
-
 				String[] arr = {temp1.getEventID()  + "", temp0.getEventID()  + "", temp1.getEndTime() + ""};
+
 				a.add(arr);
 			}
 			else {
@@ -218,6 +218,7 @@ public class CSVReader {
           sb.append(length);
           sb.append('\n');
           String[] arr = {a.get(x).getEventID() + "", a.get(x).getEventID() + "", length};
+
           arrayOfLengths.add(arr);
       }
       pw.write(sb.toString());
@@ -264,6 +265,10 @@ public class CSVReader {
 
  public static Comparator<Integer[]> comparator = new Comparator<Integer[]>() {
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 335e4b60753ab90df2b089ab0138d94b5d9f7489
 	public int compare(Integer[] s1, Integer[] s2) {
 	   //ascending order
 	   return s1[2] - s2[2];
@@ -287,8 +292,10 @@ public class CSVReader {
 				String computation = args[1];
 				if (computation.equals("lengths")) {
 					System.out.println("Events and their lengths (unsorted): ");
+
 					ArrayList<String[]> lengthArray = computeLengths(array);
 					toStringComputations2(lengthArray);
+
 					System.out.println("Events and their lengths (sorted): ");
 					Collections.sort(lengthArray, compString);
 					toStringComputations2(lengthArray);

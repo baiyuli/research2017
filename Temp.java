@@ -41,7 +41,7 @@ public class Temp {
 			}
 			return result;
 		}
-
+		// make sure to change this so that it can leave the for loop as soon as possible
 		public static ArrayList<String[]> computeMeets(ArrayList<Event> st, ArrayList<Event> et) {
 			ArrayList<String[]> result = new ArrayList<String[]>();
 			int index = 0;
@@ -163,10 +163,10 @@ public class Temp {
 				ArrayList<String[]> meets = computeMeets(sortedArrayByST, sortedArrayByET);
 				toStringComputations2(meets);
 			}
-			else if (computation.equals("overlaps")) {
-				ArrayList<String[]> overlaps = computeOverlaps(sortedArrayByET);
-				// toStringComputations2(overlaps);
-			}
+			// else if (computation.equals("overlaps")) {
+			// 	ArrayList<String[]> overlaps = computeOverlaps(sortedArrayByET);
+			// 	// toStringComputations2(overlaps);
+			// }
 
 
       // toStringComputations2(before);

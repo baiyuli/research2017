@@ -25,24 +25,33 @@ public class CSVReader {
 		}
 	}
 
-	public static void computeBefore() {
+	public static ArrayList<String[]> computeBefore() {
+		ArrayList<String[]> a = new ArrayList<String[]>();
 		for (int x = 0; x < alanAlgebraTable.size(); x++) {
 			Event temp0 = table.get(alanAlgebraTable.get(x)[0]);
 			Event temp1 = table.get(alanAlgebraTable.get(x)[1]);
 
-			if (temp0.getEndTime().compareTo(temp1.getStartTime()) < 0) {
-				alanAlgebraTable.get(x)[2] = 1;
-				alanAlgebraTable.get(x)[3] = 0;
+			if (temp0.getEndTime().compareTo(temp1.getStartTime()) == 0) {
+				alanAlgebraTable.get(x)[5] = 1;
+				alanAlgebraTable.get(x)[6] = 0;
+				String[] arr = {temp0.getEventID() + "", temp1.getEventID() + "", temp0.getEndTime() + ""};
+
+				a.add(arr);
+
 			}
-			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) > 0) {
-				alanAlgebraTable.get(x)[2] = 0;
-				alanAlgebraTable.get(x)[3] = 1;
+			else if (temp1.getEndTime().compareTo(temp0.getStartTime()) == 0) {
+				alanAlgebraTable.get(x)[5] = 0;
+				alanAlgebraTable.get(x)[6] = 1;
+				String[] arr = {temp1.getEventID()  + "", temp0.getEventID()  + "", temp1.getEndTime() + ""};
+
+				a.add(arr);
 			}
 			else {
-				alanAlgebraTable.get(x)[2] = 0;
-				alanAlgebraTable.get(x)[3] = 0;
+				alanAlgebraTable.get(x)[5] = 0;
+				alanAlgebraTable.get(x)[6] = 0;
 			}
 		}
+		return a;
 	}
 
 	public static void computeEqual() {
@@ -306,7 +315,6 @@ public class CSVReader {
 					Collections.sort(meetArray, compString);
 					toStringComputations2(meetArray);
 				}
-				toStringComputations(alanAlgebraTable);
 
       } catch (FileNotFoundException ex) {
         ex.printStackTrace();
@@ -322,7 +330,7 @@ else{
   System.out.println("Choose a CSV file");
 }
     long endTime   = System.nanoTime();
-    long totalTime = endTime - startTime; // Total duration of program 
+    long totalTime = endTime - startTime; // Total duration of program
     System.out.println("Run time is: " + totalTime + " nanoseconds");
     }
   // converts sorted CSV file into text file to be used by plotting program

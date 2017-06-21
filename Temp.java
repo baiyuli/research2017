@@ -6,34 +6,75 @@ import java.util.*;
 import java.lang.String;
 
 public class Temp {
-	// private ArrayList<Event> eventList = new ArrayList<Event>();
-	private String[] columns = {"Event id X", "Event id Y", "X before Y", "X after Y", "X equal Y",
-															"X meets Y", "X is met by Y", "X overlaps Y", "X overlapped by Y",
-															"X during Y", "Y during X", "X starts Y", "X is started by Y", "X finishes Y", "X is finished by Y"};
-	private static Hashtable<Integer, Event> table = new Hashtable<Integer, Event>();
-	private static ArrayList<Integer[]> alanAlgebraTable = new ArrayList<Integer[]>();
 
-
-	public static void constructAATable(ArrayList<Event> e) {
-		for (int x = 0; x < e.size() - 1; x++) {
-			for (int y = x + 1; y < e.size(); y++) {
-				Integer[] temp = new Integer[15];
-				temp[0] = e.get(x).getEventID();
-				temp[1] = e.get(y).getEventID();
-				alanAlgebraTable.add(temp);
-			}
-		}
-	}
-
-
-  public static void toStringComputations(ArrayList<Integer[]> array) {
-    for (int x = 0; x < array.size(); x++) {
-      for (int y = 0; y < array.get(x).length; y++) {
-        System.out.print(array.get(x)[y] + " ");
+  public static ArrayList<String[]> computeBefore(ArrayList<Event> st, ArrayList<Event> et) {
+    ArrayList<String[]> result = new ArrayList<String[]>();
+    int index = st.size() - 1;
+    for (int x = 0; x < st.size(); x++) {
+      Event end = et.get(x);
+      Event start = st.get(index);
+      if (end.getEndTime().compareTo(st.get(st.size() - 1).getStartTime()) > 0) {
+        return result;
       }
-      System.out.println();
+      while (end.getEndTime().compareTo(start.getStartTime()) < 0 && index >= 0) {
+        String[] temp = {end.getEventID() + "", start.getEventID() + "", end.getEndTime() + ""};
+        result.add(temp);
+        index--;
+        start = st.get(index);
+      }
+      index = st.size() - 1;
     }
+    return result;
   }
+
+		public static ArrayList<String[]> computeEquals(ArrayList<Event> st) {
+			ArrayList<String[]> result = new ArrayList<String[]>();
+			for (int x = 0; x < st.size() - 1; x++) {
+				int y = x+1;
+				while (st.get(x).getStartTime().compareTo(st.get(y).getStartTime()) == 0 && y < st.size()) {
+					if (st.get(x).getEndTime().compareTo(st.get(y).getEndTime()) == 0) {
+						String[] temp = {st.get(x).getEventID() + "", st.get(y).getEventID() + ""};
+						result.add(temp);
+					}
+					y++;
+				}
+			}
+			return result;
+		}
+
+		public static ArrayList<String[]> computeMeets(ArrayList<Event> st, ArrayList<Event> et) {
+			ArrayList<String[]> result = new ArrayList<String[]>();
+			int index = 0;
+			for (int x = 0; x < et.size() - 1; x++) {
+				while (et.get(x).getEndTime().compareTo(st.get(index).getStartTime()) > 0 && index < st.size() - 1) {
+					index++;
+				}
+				while (et.get(x).getEndTime().compareTo(st.get(index).getStartTime()) == 0  && index < st.size() - 1) {
+					String[] temp = {et.get(x).getEventID() + "", st.get(index).getEventID() + "", et.get(x).getEndTime() + ""};
+					result.add(temp);
+					index++;
+				}
+			}
+			return result;
+		}
+
+		// public static ArrayList<ArrayList<String[]>> computeODSF(ArrayList<Event> et, String computation) {
+		// 	ArrayList<ArrayList<String[]>> answer = new ArrayList<ArrayList<String[]>>(4);
+		// 	ArrayList<String[]> overlaps = new ArrayList<String[]>();
+		// 	for (int x = et.size() - 1; x > 0; x--) {
+		// 		for (int y = x - 1; y >= 0; y--) {
+		// 			if (st.get(x).getEndTime().compareTo(st.get(y).getEndTime()) < 0 ) {
+		// 				if (st.get(x).getStartTime().compareTo(st.get(y).getStartTime()) < 0) {
+		// 					String[] temp = {st.get(x).getEventID() + "", st.get(y).getEventID() + "", st.get(y).getStartTime() + "", st.get(x).getEndTime() + ""};
+		// 					overlaps.add(temp);
+		// 				}
+		// 			}
+		// 			else if(st.get(x).getEndTime().compareTo(st.get(y).getEndTime()) == 0)
+		// 		}
+		// 	}
+		// 	return result;
+		//
+		// }
 
 	public static void toStringComputations2(ArrayList<String[]> array) {
 		for (int x = 0; x < array.size(); x++) {
@@ -70,7 +111,7 @@ public class Temp {
             Timestamp endTime = Timestamp.valueOf(event[2]);
             long length = endTime.getTime() - startTime.getTime();
             Event temp = new Event(id, startTime, endTime, length);
-            table.put(id, temp);
+            // table.put(id, temp);
             array.add(temp);
 
         }
@@ -102,49 +143,48 @@ public class Temp {
   public static void main(String[] args) {
     String fileName = args[0];
     if(fileName.endsWith(".csv")){
-
+      long startTime = System.nanoTime();
       ArrayList<Event> eventArray = getDataFromCSVFile(fileName);
       ArrayList<Event> sortedArrayByST = eventArray;
       Collections.sort(sortedArrayByST, compEvent);
-      toStringEvent(sortedArrayByST);
+
+      ArrayList<Event> sortedArrayByET = eventArray;
+      Collections.sort(sortedArrayByET, compEvent);
+			String computation = args[1];
+			if (computation.equals("before")) {
+				ArrayList<String[]> before = computeBefore(sortedArrayByST, sortedArrayByET);
+				// toStringComputations2(before);
+			}
+			else if (computation.equals("equals")) {
+				ArrayList<String[]> equals = computeEquals(sortedArrayByST);
+				toStringComputations2(equals);
+			}
+			else if (computation.equals("meets")) {
+				ArrayList<String[]> meets = computeMeets(sortedArrayByST, sortedArrayByET);
+				toStringComputations2(meets);
+			}
+			else if (computation.equals("overlaps")) {
+				ArrayList<String[]> overlaps = computeOverlaps(sortedArrayByET);
+				// toStringComputations2(overlaps);
+			}
+
+
+      // toStringComputations2(before);
+      long endTime   = System.nanoTime();
+      long totalTime = endTime - startTime; // Total duration of program
+      System.out.println("Run time is: " + totalTime + " nanoseconds");
+
+      // long startTime2 = System.nanoTime();
+      // constructAATable(eventArray);
+      // ArrayList<String[]> before2 = computeBeforeOrig();
+      // // toStringComputations2(before2);
+      // long endTime2 = System.nanoTime();
+      // long totalTime2 = endTime2 - startTime2;
+      // System.out.println("Run time2 is: " + totalTime2 + " nanoseconds");
+
     }
     else{
       System.out.println("Choose a CSV file");
     }
   }
-  // converts sorted CSV file into text file to be used by plotting program
-  public static void SortedCSVtoText(ArrayList<Event> a) throws FileNotFoundException{
-      PrintWriter pw = new PrintWriter(new File("Lengths.txt"));
-      StringBuilder sb = new StringBuilder();
-      ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
-      // append the parameter information to the text file
-      sb.append("Title Start-time vs End-time");
-      sb.append('\n');
-      sb.append("xTitle Start-time");
-      sb.append('\n');
-      sb.append("yTitle End-time");
-      sb.append('\n');
-      sb.append("xLower 0");
-      sb.append('\n');
-      sb.append("xUpper 1320000000000");
-      sb.append('\n');
-      sb.append("xInterval 100000000000");
-      sb.append('\n');
-      sb.append("yLower 0");
-      sb.append('\n');
-      sb.append("yUpper 1330000000000");
-      sb.append('\n');
-      sb.append("yInterval 100000000000");
-      sb.append('\n');
-      sb.append("Data");
-      sb.append('\n');
-
-      for (int x = 0; x < a.size(); x++) {
-          sb.append((a.get(x)).getStartTime().getTime() + " " +  (a.get(x)).getEndTime().getTime());
-          sb.append('\n');
-
-      }
-      pw.write(sb.toString());
-      pw.close();
-    }
 }

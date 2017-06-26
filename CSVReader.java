@@ -283,10 +283,12 @@ public class CSVReader {
   public static void main(String[] args) {
       long startTime = System.nanoTime();
 
-      String fileName = args[0];
-      if(fileName.endsWith(".csv")){
+      String inputFileName = args[0];
+      String outPutFileName = args[2];
 
-      ArrayList<Event> array = getDataFromCSVFile(fileName);
+      if(inputFileName.endsWith(".csv")){
+
+      ArrayList<Event> array = getDataFromCSVFile(inputFileName);
       try {
 				constructAATable(array);
 				// computeBefore();
@@ -329,10 +331,54 @@ public class CSVReader {
 else{
   System.out.println("Choose a CSV file");
 }
+
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime; // Total duration of program
     System.out.println("Run time is: " + totalTime + " nanoseconds");
     }
+
+ public static void generateCsvFile(ArrayList<String[]> eventArray)
+    {
+        String output = "Event ID, Start Time, End Time \n";
+
+for(int i = 0; i < eventArray.size;i++){
+        for (String[] events in eventArray) {
+            output += table.get(events[i]).getEventID() + ", " 
+             		+ table.get(events[i]).getStartTime + ", "
+             		+ table.get(events[i]).getEndTime   + "\n";
+        }
+
+        return output;
+    	}
+	}
+}
+public static void generateCsvFile(String fileName, ArrayList<String[]> eventArray)
+    {
+           try
+           {
+                FileWriter writer = new FileWriter(fileName);
+
+                writer.append("Email");
+                writer.append(',');
+                writer.append("Name");
+                writer.append('\n');
+
+                for (String[] events in eventArray) {
+                     writer.append(user.getEmail());
+                     writer.append(',');
+                     writer.append(user.getName());
+                     writer.append('\n');
+                }
+
+                writer.flush();
+                writer.close();
+           } catch(IOException e) {
+                 e.printStackTrace();
+           } 
+      }
+
+
+
   // converts sorted CSV file into text file to be used by plotting program
   public static void SortedCSVtoText(ArrayList<Event> a) throws FileNotFoundException{
       PrintWriter pw = new PrintWriter(new File("Lengths.txt"));

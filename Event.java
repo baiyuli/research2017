@@ -11,11 +11,10 @@ public class Event{
 	long length;
 	Timestamp startTime, endTime;
 
-	public Event(int id, Timestamp startTime,Timestamp endTime, long length){
+	public Event(int id, Timestamp startTime,Timestamp endTime){
 		this.id 	 		 = id;
 		this.startTime = startTime;
 		this.endTime   = endTime;
-		this.length    = length;
 	}
 
 	int getEventID(){
@@ -30,8 +29,20 @@ public class Event{
 		return endTime;
 	}
 
-	long getLength(){
-		return length;
+	void setStartTime(Timestamp newStartTime){
+		startTime = newStartTime;
+	}
+
+	void setEndTime(Timestamp newEndTime){
+		endTime = newEndTime;
+	}
+
+	public String toString(){
+		String eventID = "Event ID: "   +  id + " ";
+		String sTime   = "Start Time: " +  startTime.toString() + " ";
+		String eTime   =  "End Time:  " +  endTime.toString() + "\n";
+
+		return eventID + sTime + eTime;
 	}
 
 }

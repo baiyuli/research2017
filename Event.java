@@ -7,40 +7,71 @@ import java.lang.Object;
  * @author Carlos Salas Ortega, Baiyu Li, Gianna Wu
  */
 public class Event{
-	int id;
+	int id, startTimeInt, endTimeInt;
 	long length;
-	Timestamp startTime, endTime;
+	Timestamp startTimestamp, endTimestamp;
 
-	public Event(int id, Timestamp startTime,Timestamp endTime){
-		this.id 	 		 = id;
-		this.startTime = startTime;
-		this.endTime   = endTime;
+	public Event(int id, Timestamp startTimestamp,Timestamp endTimestamp){
+		this.id 	   = id;
+		this.startTimestamp = startTimestamp;
+		this.endTimestamp   = endTimestamp;
 	}
 
+	public Event(int id, int startTimeInt, int endTimeInt){
+		this.id        = id;
+		this.startTimeInt = startTimeInt;
+		this.endTimeInt   = endTimeInt;
+
+	}
 	int getEventID(){
 		return id;
 	}
 
-	Timestamp getStartTime(){
-		return startTime;
+	Timestamp getStartTimestamp(){
+		return startTimestamp;
 	}
 
-	Timestamp getEndTime(){
-		return endTime;
+	Timestamp getEndTimestamp(){
+		return endTimestamp;
 	}
 
-	void setStartTime(Timestamp newStartTime){
-		startTime = newStartTime;
+	int getStartTimeInt(){
+		return startTimeInt;
 	}
 
-	void setEndTime(Timestamp newEndTime){
-		endTime = newEndTime;
+	int getEndTimeInt(){
+		return endTimeInt;
 	}
 
-	public String toString(){
+	void setStartTimestamp(Timestamp newStartTimestamp){
+		startTimestamp = newStartTimestamp;
+	}
+
+	void setEndTimestamp(Timestamp newEndTimestamp){
+		endTimestamp = newEndTimestamp;
+	}
+
+	void setStartTimeInt(int newStartTimeInt){
+		startTimeInt = newStartTimeInt;
+	}
+
+	void setEndTimeInt(int newEndTimeInt){
+		endTimeInt = newEndTimeInt;
+	}
+
+	public String toStringStamp(){
 		String eventID = "Event ID: "   +  id + " ";
-		String sTime   = "Start Time: " +  startTime.toString() + " ";
-		String eTime   =  "End Time:  " +  endTime.toString() + "\n";
+		String sTime   = "Start Time: " +  startTimestamp.toString() + " ";
+		String eTime   =  "End Time:  " +  endTimestamp.toString() + "\n";
+
+		return eventID + sTime + eTime;
+	}
+
+
+	public String toStringInt(){
+		String eventID = "Event ID: "   +  id + " ";
+		String sTime   = "Start Time: " +  startTimeInt + " ";
+		String eTime   =  "End Time:  " +  endTimeInt + "\n";
 
 		return eventID + sTime + eTime;
 	}

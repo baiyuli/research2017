@@ -24,10 +24,10 @@ public class RandomTimeStampGenerator {
 
 
 	for (int i = 0; i < eventList.size() ;i++ ) {
-			System.out.println(eventList.get(i).toString());
+			System.out.println(eventList.get(i).toStringStamp());
 		}
 
-		PrintWriter pw = new PrintWriter(new File("test.csv"));
+		PrintWriter pw = new PrintWriter(new File("RandomTimeStamps.csv"));
         StringBuilder sb = new StringBuilder();
         sb.append("id");
         sb.append(',');
@@ -39,9 +39,9 @@ public class RandomTimeStampGenerator {
     for (int i = 0; i < eventList.size(); i++){
         sb.append(eventList.get(i).getEventID() + "");
         sb.append(',');
-        sb.append(eventList.get(i).getStartTime().toString());
+        sb.append(eventList.get(i).getStartTimestamp().toString());
         sb.append(',');
-        sb.append(eventList.get(i).getEndTime().toString());
+        sb.append(eventList.get(i).getEndTimestamp().toString());
         sb.append('\n');
         }
         pw.write(sb.toString());
@@ -52,11 +52,11 @@ public class RandomTimeStampGenerator {
 
 	public static void compare(){
 		for(int i = 0; i < eventList.size(); i++){
-			Timestamp tempStart = eventList.get(i).getStartTime();
-			Timestamp tempEnd   = eventList.get(i).getEndTime();
+			Timestamp tempStart = eventList.get(i).getStartTimestamp();
+			Timestamp tempEnd   = eventList.get(i).getEndTimestamp();
 			if(tempStart.after(tempEnd)) {
-				eventList.get(i).setStartTime(tempEnd);
-				eventList.get(i).setEndTime(tempStart);
+				eventList.get(i).setStartTimestamp(tempEnd);
+				eventList.get(i).setEndTimestamp(tempStart);
 			}
 
 		}

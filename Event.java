@@ -27,19 +27,19 @@ public class Event{
 		return id;
 	}
 
-	Timestamp getStartTimestamp(){
+	Timestamp getStartTime(){
 		return startTimestamp;
 	}
 
-	Timestamp getEndTimestamp(){
+	Timestamp getEndTime(){
 		return endTimestamp;
 	}
 
-	int getStartTimeInt(){
+	int getStartTime(){
 		return startTimeInt;
 	}
 
-	int getEndTimeInt(){
+	int getEndTime(){
 		return endTimeInt;
 	}
 

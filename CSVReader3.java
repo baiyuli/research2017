@@ -15,75 +15,88 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 			Event x = st.get(i);
 			for (int j = i + 1; j < st.size(); j++) {
 				Event y = st.get(j);
-				// overlap, meet, and before
+				// overlap, meet, < (before), fi (inverse finish), di (inverse during)
 				if (x.getStartTime().compareTo(y.getStartTime()) < 0) {
 					// overlaps
 					if (x.getEndTime().compareTo(y.getStartTime()) > 0) {
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "",
 										"overlaps", y.getStartTime() + ", " + x.getEndTime()};
-										alanAlgebraTable.add(array);
-
-						String[] array2 = {y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", "is overlapped by"};
-						alanAlgebraTable.add(array2);
+						alanAlgebraTable.add(array);
 					}
 					// meets
 					else if (x.getEndTime().compareTo(y.getStartTime()) == 0) {
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "meets", y.getStartTime() + ""};
-
-										alanAlgebraTable.add(array);
-										String[] array2 = {y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", "is met by"};
-										alanAlgebraTable.add(array2);
+						alanAlgebraTable.add(array);
 					}
 					// before
 					else if (x.getEndTime().compareTo(y.getStartTime()) < 0) {
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "",	y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "before"};
 						alanAlgebraTable.add(array);
-
-						String[] array2 = {y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", "is after"};
-						alanAlgebraTable.add(array2);
+					}
+					// fi
+					else if (x.getEndTime().compareTo(y.getEndTime()) == 0) {
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "",	y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "fi"};
+						alanAlgebraTable.add(array);
+					}
+					// di
+					else if (x.getEndTime().compareTo(y.getEndTime()) > 0) {
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "",	y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "di"};
+						alanAlgebraTable.add(array);
+					}
+					else {
+						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error");
 					}
 
 				}
-				// equals, starts
+				// equals, starts, si (starts inverse)
 				else if (x.getStartTime().compareTo(y.getStartTime()) == 0) {
 					// equals
 					if (x.getEndTime().compareTo(y.getEndTime()) == 0) {
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "equals"};
 						alanAlgebraTable.add(array);
-
-						String[] array2 = {y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", "is equal to"};
-						alanAlgebraTable.add(array2);
 					}
 					// starts
 					else if (x.getEndTime().compareTo(y.getEndTime()) < 0) {
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "starts"};
 						alanAlgebraTable.add(array);
-
-						String[] array2 = {y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", "is started by"};
-						alanAlgebraTable.add(array2);
+					}
+					else if (x.getEndTime().compareTo(y.getEndTime()) > 0) {
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "si"};
+						alanAlgebraTable.add(array);
+					}
+					else {
+						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error");
 					}
 				}
-				// during, finishes
+				// oi (inverse overlap), mi (inverse meet), > (after), during, finishes
 				else {
+					// oi
+					if (x.getEndTime().compareTo(y.getEndTime()) > 0) {
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "oi"};
+						alanAlgebraTable.add(array);
+					}
+					// mi
+					else if (x.getStartTime().compareTo(y.getEndTime()) == 0) {
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "mi"};
+						alanAlgebraTable.add(array);
+					}
+					// > (after)
+					else if (x.getStartTime().compareTo(y.getEndTime()) > 0) {
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "after"};
+						alanAlgebraTable.add(array);
+					}
 					//during
-					if (x.getEndTime().compareTo(y.getEndTime()) < 0) {
-						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "",
-										y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "",
-										"during"};
-
-										alanAlgebraTable.add(array);
-										String[] array2 = {y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", "is during"};
-										alanAlgebraTable.add(array2);
+					else if (x.getEndTime().compareTo(y.getEndTime()) < 0) {
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "during"};
+						alanAlgebraTable.add(array);
 					}
 					// finishes
 					else if (x.getEndTime().compareTo(y.getEndTime()) == 0) {
-						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "",
-										y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "",
-										"finishes"};
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "finishes"};
 						alanAlgebraTable.add(array);
-
-						String[] array2 = {y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", "is finished by"};
-						alanAlgebraTable.add(array2);
+					}
+					else {
+						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error");
 					}
 				}
 
@@ -183,9 +196,6 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 
       String fileName = args[0];
 			ArrayList<Event> eventArray = getDataFromCSVFile(fileName);
-			// ArrayList<Event> sortedArrayByST = eventArray;
-			// Collections.sort(sortedArrayByST, compEvent);
-			// constructAATable(sortedArrayByST);
 			String output = args[1];
 			constructAATable(eventArray);
 			// try {

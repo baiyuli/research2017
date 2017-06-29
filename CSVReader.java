@@ -333,9 +333,38 @@ else{
     long totalTime = endTime - startTime; // Total duration of program
     System.out.println("Run time is: " + totalTime + " nanoseconds");
     }
+  
+public static void SortAAComputedCSV(String file){
+    String csvFile = file;
+    String line = "";
+    String csvSplitBy = ",";
+    ArrayList<String> array = new ArrayList<String>();
+    try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+
+        while ((line = br.readLine()) != null) {
+
+            // use comma as separator
+            String[] event = line.split(csvSplitBy);
+            String id  = event[0];
+            String id2 = event[3];
+            String AARelation = event[6];
+           
+            array.add(AARelation);
+            array.add(id);
+            array.add(id2);
+            
+
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return array;
+  }
+
   // converts sorted CSV file into text file to be used by plotting program
-  public static void SortedCSVtoText(ArrayList<Event> a) throws FileNotFoundException{
-      PrintWriter pw = new PrintWriter(new File("Lengths.txt"));
+  public static void SortedCSVtoText(ArrayList<Strings> a) throws FileNotFoundException{
+      PrintWriter pw = new PrintWriter(new File("EventsBefore.txt"));
       StringBuilder sb = new StringBuilder();
       ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
       // append the parameter information to the text file
@@ -368,4 +397,6 @@ else{
       pw.write(sb.toString());
       pw.close();
     }
+
+    
 }

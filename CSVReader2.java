@@ -193,9 +193,106 @@ public class CSVReader2 {
 				e.printStackTrace();
 			}
 
+			SortAATable(alanAlgebraTable);
+	
+
+
+
 
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime; // Total duration of program
     System.out.println("Run time is: " + totalTime + " nanoseconds");
+    }
+
+    
+    public static void SortAATable(ArrayList<String[]> a){
+    
+
+            
+            long minStartTime = (Timestamp.valueOf(a.get(0)[1])).getTime();
+            
+            long maxEndTime   = (Timestamp.valueOf(a.get(a.size()-1)[5])).getTime();
+          
+            long interval     = (maxEndTime - minStartTime)/100; 
+            ArrayList<String> concurrentIDs = new ArrayList<String>();
+            Hashtable intervalAndIDs = new Hashtable();
+            Enumeration times;
+            int intervals;
+            int numberOfIDs;
+    
+            
+            for (long x = minStartTime; x < maxEndTime ; x = x+interval){
+            	for (int y = 0 ; y < a.size() ; y++){
+            		
+            		if (Timestamp.valueOf(a.get(y)[1]).getTime()>= x && 
+            			Timestamp.valueOf(a.get(y)[1]).getTime() < x+interval &&
+            			!concurrentIDs.contains(a.get(y)[0])){
+            				concurrentIDs.add(a.get(y)[0]);
+            			
+            				if (a.get(y)[6] == "equals" && !concurrentIDs.contains(a.get(y)[3])){
+            					concurrentIDs.add(a.get(y)[3]);
+            				}
+            				if (a.get(y)[6] == "meets" && 
+            					Timestamp.valueOf(a.get(y)[7]).getTime() < x+interval &&
+            					!concurrentIDs.contains(a.get(y)[3])){
+            					concurrentIDs.add(a.get(y)[3]);
+            				}
+            				if (a.get(y)[6] == "starts" && !concurrentIDs.contains(a.get(y)[3])){
+            					concurrentIDs.add(a.get(y)[3]);
+            				}
+            				if (a.get(y)[6] == "during" && !concurrentIDs.contains(a.get(y)[3])){
+            					concurrentIDs.add(a.get(y)[3]);
+            				}
+            				if (a.get(y)[6] == "meets" && 
+                					Timestamp.valueOf(a.get(y)[7]).getTime() < x+interval &&
+                					!concurrentIDs.contains(a.get(y)[3])){
+                					concurrentIDs.add(a.get(y)[3]);
+                				}
+            	}
+    }
+            	intervalAndIDs.put(x, concurrentIDs.size());
+            	concurrentIDs.clear();
+    }
+    System.out.println("hello");
+              try{  SortedCSVtoText(intervalAndIDs, minStartTime, maxEndTime, interval, 13);
+              		}
+              catch (FileNotFoundException e){e.printStackTrace();}
+  }
+
+  // converts sorted CSV file into text file to be used by plotting program
+  public static void SortedCSVtoText(Hashtable a, long minStartTime, long maxEndTime, long interval, int numEvents) throws FileNotFoundException{
+      PrintWriter pw = new PrintWriter(new File("concurrentEvents.txt"));
+      StringBuilder sb = new StringBuilder();
+      ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
+      // append the parameter information to the text file
+      sb.append("Title Time vs Number of Events");
+      sb.append('\n');
+      sb.append("xTitle Time (ms)");
+      sb.append('\n');
+      sb.append("yTitle Number of Events");
+      sb.append('\n');
+      sb.append("xLower " + minStartTime);
+      sb.append('\n');
+      sb.append("xUpper " + maxEndTime);
+      sb.append('\n');
+      sb.append("xInterval " + interval);
+      sb.append('\n');
+      sb.append("yLower 0");
+      sb.append('\n');
+      sb.append("yUpper " + numEvents);
+      sb.append('\n');
+      sb.append("yInterval 1");
+      sb.append('\n');
+      sb.append("Data");
+      sb.append('\n');
+
+      for (long x = minStartTime ; x < maxEndTime ; x = x + interval) {
+          
+          sb.append(x + " " +  a.get(x));
+          sb.append('\n');
+
+      }
+      pw.write(sb.toString());
+      pw.close();
     }
 }

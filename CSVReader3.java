@@ -18,14 +18,14 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 				// overlap, meet, < (before), fi (inverse finish), di (inverse during)
 				if (x.getStartTime().compareTo(y.getStartTime()) < 0) {
 					// overlaps
-					if (x.getEndTime().compareTo(y.getStartTime()) > 0) {
+					if (x.getEndTime().compareTo(y.getStartTime()) > 0 && x.getEndTime().compareTo(y.getEndTime()) < 0) {
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "",
 										"overlaps", y.getStartTime() + ", " + x.getEndTime()};
 						alanAlgebraTable.add(array);
 					}
 					// meets
-					else if (x.getEndTime().compareTo(y.getStartTime()) == 0) {
-						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "meets", y.getStartTime() + ""};
+					else if (x.getEndTime().compareTo(y.getStartTime()) == 0 && x.getEndTime().compareTo(y.getEndTime()) != 0) {
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "meets", y.getStartTime() + ""};
 						alanAlgebraTable.add(array);
 					}
 					// before
@@ -44,7 +44,7 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 						alanAlgebraTable.add(array);
 					}
 					else {
-						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error");
+						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error1");
 					}
 
 				}
@@ -52,7 +52,7 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 				else if (x.getStartTime().compareTo(y.getStartTime()) == 0) {
 					// equals
 					if (x.getEndTime().compareTo(y.getEndTime()) == 0) {
-						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "equals"};
+						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "equals"};
 						alanAlgebraTable.add(array);
 					}
 					// starts
@@ -60,12 +60,13 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "starts"};
 						alanAlgebraTable.add(array);
 					}
+					// si 
 					else if (x.getEndTime().compareTo(y.getEndTime()) > 0) {
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "si"};
 						alanAlgebraTable.add(array);
 					}
 					else {
-						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error");
+						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error2");
 					}
 				}
 				// oi (inverse overlap), mi (inverse meet), > (after), during, finishes
@@ -96,7 +97,7 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 						alanAlgebraTable.add(array);
 					}
 					else {
-						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error");
+						System.out.println("ID1: " + x.getEventID() + "ID2: " + y.getEventID() + " error3");
 					}
 				}
 
@@ -145,8 +146,10 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 						// use comma as separator
 						String[] event = line.split(csvSplitBy);
 						int id = Integer.parseInt(event[0]);
-						Timestamp startTime = Timestamp.valueOf(event[1]);
-						Timestamp endTime = Timestamp.valueOf(event[2]);
+						// Timestamp startTime = Timestamp.valueOf(event[1]);
+						// Timestamp endTime = Timestamp.valueOf(event[2]);
+						int startTime = Integer.valueOf(event[1]);
+						int endTime = Integer.valueOf(event[2]);
 						Event temp = new Event(id, startTime, endTime);
 						// table.put(id, temp);
 						array.add(temp);
@@ -159,9 +162,31 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 		return array;
 	}
 
+	public static ArrayList<Event> getDataFromCSVFileRoss(String file) {
+		String csvFile = file;
+		String line = "";
+		String csvSplitBy = ",";
+		ArrayList<Event> array = new ArrayList<Event>();
+		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+			line = br.readLine();
+			while ((line = br.readLine()) != null) {
+				String[] event = line.split(csvSplitBy);
+				int id = Integer.parseInt(event[0].substring(1, event[0].length() - 1));
+				int startTime = Integer.valueOf(event[2].substring(1, event[2].length() - 1));
+				int endTime = Integer.valueOf(event[4].substring(1, event[4].length() - 1));
+				Event temp = new Event(id, startTime, endTime);
+				array.add(temp);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return array;
+	}
+
 	public static void toCSV(ArrayList<String[]> a, String filename) throws FileNotFoundException{
 		PrintWriter pw = new PrintWriter(new File(filename));
 		StringBuilder sb = new StringBuilder();
+		sb.append("E1 ID, \t E1 ST, \t E1 ET, \t E2 ST, \t E2 ET, \t AAC \n");
 		for (int x = 0; x < a.size(); x++) {
 			for (int y = 0; y < a.get(x).length; y++) {
 			sb.append(a.get(x)[y]);
@@ -195,15 +220,15 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
       long startTime = System.nanoTime();
 
       String fileName = args[0];
-			ArrayList<Event> eventArray = getDataFromCSVFile(fileName);
+			ArrayList<Event> eventArray = getDataFromCSVFileRoss(fileName);
 			String output = args[1];
 			constructAATable(eventArray);
-			// try {
-			// 	toCSV(alanAlgebraTable, output);
-			// }
-			// catch (FileNotFoundException e) {
-			// 	e.printStackTrace();
-			// }
+			try {
+				toCSV(alanAlgebraTable, output);
+			}
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 
 
     long endTime   = System.nanoTime();

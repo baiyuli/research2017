@@ -60,7 +60,7 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "starts"};
 						alanAlgebraTable.add(array);
 					}
-					// si 
+					// si
 					else if (x.getEndTime().compareTo(y.getEndTime()) > 0) {
 						String[] array = {x.getEventID() + "", x.getStartTime() + "", x.getEndTime() + "", + y.getEventID() + "", y.getStartTime() + "", y.getEndTime() + "", "si"};
 						alanAlgebraTable.add(array);
@@ -162,7 +162,7 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 		return array;
 	}
 
-	public static ArrayList<Event> getDataFromCSVFileRoss(String file) {
+	public static ArrayList<Event> getDataFromCSVFileRoss(String file, int idCol, int stCol, int etCol) {
 		String csvFile = file;
 		String line = "";
 		String csvSplitBy = ",";
@@ -171,9 +171,9 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 			line = br.readLine();
 			while ((line = br.readLine()) != null) {
 				String[] event = line.split(csvSplitBy);
-				int id = Integer.parseInt(event[0].substring(1, event[0].length() - 1));
-				int startTime = Integer.valueOf(event[2].substring(1, event[2].length() - 1));
-				int endTime = Integer.valueOf(event[4].substring(1, event[4].length() - 1));
+				int id = Integer.parseInt(event[idCol].substring(1, event[idCol].length() - 1));
+				int startTime = Integer.valueOf(event[stCol].substring(1, event[stCol].length() - 1));
+				int endTime = Integer.valueOf(event[etCol].substring(1, event[etCol].length() - 1));
 				Event temp = new Event(id, startTime, endTime);
 				array.add(temp);
 			}
@@ -217,11 +217,20 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 		    }};
 
   public static void main(String[] args) {
-      long startTime = System.nanoTime();
+			Scanner scan = new Scanner(System.in);
+			System.out.print("CSV File: ");
+			String fileName = scan.next();
+			System.out.print("Output File: ");
+			String output = scan.next();
+			System.out.print("ID Column: ");
+			int idCol = scan.nextInt();
+			System.out.print("Start time Column: ");
+			int stCol = scan.nextInt();
+			System.out.print("End time Column: ");
+			int etCol = scan.nextInt();
+			long startTime = System.nanoTime();
+			ArrayList<Event> eventArray = getDataFromCSVFileRoss(fileName, idCol, stCol, etCol);
 
-      String fileName = args[0];
-			ArrayList<Event> eventArray = getDataFromCSVFileRoss(fileName);
-			String output = args[1];
 			constructAATable(eventArray);
 			try {
 				toCSV(alanAlgebraTable, output);

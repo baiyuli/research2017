@@ -8,7 +8,7 @@ import java.lang.Object;
  */
 public class Event{
 	public int id;
-	public Integer startTime, endTime;
+	public Long startTime, endTime;
 	public long length;
 
 
@@ -19,12 +19,19 @@ public class Event{
 	// 	this.length = endTime.getTime() - startTime.getTime();
 	// }
 
-	public Event(int id, int startTime, int endTime) {
+	public Event(int id, long startTime, long endTime) {
 		this.id = id;
-		this.startTime = (Integer)startTime;
-		this.endTime = (Integer)endTime;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.length = endTime - startTime;
 
+	}
+	//
+	public Event(int id, Timestamp startTime, Timestamp endTime) {
+		this.id = id;
+		this.startTime = startTime.getTime();
+		this.endTime = endTime.getTime();
+		this.length = this.startTime - this.endTime;
 	}
 
 	// any data type is an object - do typecasting
@@ -36,19 +43,19 @@ public class Event{
 		return this.length;
 	}
 
-// 	Integer getStartTime(){
-// 		return this.startTime;
-// 	}
-//
-// Integer getEndTime() {
-// 	return this.endTime;
-// }
+	Long getStartTime(){
+		return this.startTime;
+	}
 
-	void setStartTime(int newStartTime){
+Long getEndTime() {
+	return this.endTime;
+}
+
+	void setStartTime(long newStartTime){
 		this.startTime = newStartTime;
 	}
 
-	void setEndTime(int newEndTime){
+	void setEndTime(long newEndTime){
 		this.endTime = newEndTime;
 	}
 

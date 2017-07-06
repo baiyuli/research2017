@@ -7,73 +7,73 @@ import java.lang.Object;
  * @author Carlos Salas Ortega, Baiyu Li, Gianna Wu
  */
 public class Event{
-	int id, startTimeInt, endTimeInt;
-	long length;
-	Timestamp startTimestamp, endTimestamp;
+	public int id;
+	public Long startTime, endTime;
+	public long length;
 
-	public Event(int id, Timestamp startTimestamp,Timestamp endTimestamp){
-		this.id 	   = id;
-		this.startTimestamp = startTimestamp;
-		this.endTimestamp   = endTimestamp;
+
+	// public Event(int id, Timestamp startTime, Timestamp endTime){
+	// 	this.id 	   = id;
+	// 	this.startTime = (Timestamp)startTime;
+	// 	this.endTime = (Timestamp)endTime;
+	// 	this.length = endTime.getTime() - startTime.getTime();
+	// }
+
+	public Event(int id, long startTime, long endTime) {
+		this.id = id;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.length = endTime - startTime;
+
+	}
+	//
+	public Event(int id, Timestamp startTime, Timestamp endTime) {
+		this.id = id;
+		this.startTime = startTime.getTime();
+		this.endTime = endTime.getTime();
+		this.length = this.startTime - this.endTime;
 	}
 
-	public Event(int id, int startTimeInt, int endTimeInt){
-		this.id        = id;
-		this.startTimeInt = startTimeInt;
-		this.endTimeInt   = endTimeInt;
-
-	}
+	// any data type is an object - do typecasting
 	int getEventID(){
 		return id;
 	}
 
-	Timestamp getStartTime(){
-		return startTimestamp;
+	long getLength() {
+		return this.length;
 	}
 
-	Timestamp getEndTime(){
-		return endTimestamp;
+	Long getStartTime(){
+		return this.startTime;
 	}
 
-	int getStartTime(){
-		return startTimeInt;
+Long getEndTime() {
+	return this.endTime;
+}
+
+	void setStartTime(long newStartTime){
+		this.startTime = newStartTime;
 	}
 
-	int getEndTime(){
-		return endTimeInt;
+	void setEndTime(long newEndTime){
+		this.endTime = newEndTime;
 	}
 
-	void setStartTimestamp(Timestamp newStartTimestamp){
-		startTimestamp = newStartTimestamp;
-	}
-
-	void setEndTimestamp(Timestamp newEndTimestamp){
-		endTimestamp = newEndTimestamp;
-	}
-
-	void setStartTimeInt(int newStartTimeInt){
-		startTimeInt = newStartTimeInt;
-	}
-
-	void setEndTimeInt(int newEndTimeInt){
-		endTimeInt = newEndTimeInt;
-	}
-
-	public String toStringStamp(){
-		String eventID = "Event ID: "   +  id + " ";
-		String sTime   = "Start Time: " +  startTimestamp.toString() + " ";
-		String eTime   =  "End Time:  " +  endTimestamp.toString() + "\n";
-
-		return eventID + sTime + eTime;
-	}
-
-
-	public String toStringInt(){
-		String eventID = "Event ID: "   +  id + " ";
-		String sTime   = "Start Time: " +  startTimeInt + " ";
-		String eTime   =  "End Time:  " +  endTimeInt + "\n";
-
-		return eventID + sTime + eTime;
-	}
+	// public String toStringStamp(){
+	// 	String eventID = "Event ID: "   +  id + " ";
+	// 	String sTime   = "Start Time: " +  startTimestamp.toString() + " ";
+	// 	String eTime   =  "End Time:  " +  endTimestamp.toString() + "\n";
+	//
+	// 	return eventID + sTime + eTime;
+	// }
+	//
+	//
+	// public String toStringInt(){
+	// 	String eventID = "Event ID: "   +  id + " ";
+	// 	String sTime   = "Start Time: " +  startTimeInt + " ";
+	// 	String eTime   =  "End Time:  " +  endTimeInt + "\n";
+	//
+	// 	return eventID + sTime + eTime;
+	// }
 
 }

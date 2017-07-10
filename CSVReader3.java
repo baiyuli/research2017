@@ -4,6 +4,14 @@ import java.lang.Object;
 import java.lang.Enum;
 import java.util.*;
 import java.lang.String;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.ui.ApplicationFrame;
+import org.jfree.ui.RefineryUtilities;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class CSVReader3 {
 
@@ -199,6 +207,14 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 		pw.close();
 	}
 
+	public static DefaultCategoryDataset createDataset(ArrayList<Event> e ) {
+		 DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+		 for (int x = 0; x < e.size(); x++) {
+			 dataset.addValue(e.get(x).getLength(), "length", e.get(x).getStartTime() + "");
+		 }
+		 return dataset;
+	}
+
 
 	public static Comparator<String[]> compString = new Comparator<String[]>() {
 
@@ -216,7 +232,7 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 
 		    }};
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception{
 			Scanner scan = new Scanner(System.in);
 			System.out.print("CSV File: ");
 			String fileName = scan.next();
@@ -243,5 +259,20 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime; // Total duration of program
     System.out.println("Run time is: " + totalTime + " nanoseconds");
+		LineChart_AWT chart = new LineChart_AWT(
+			 "TEST" ,
+			 "Length vs. Start time",
+			 eventArray);
+
+		JFreeChart chartObj = ChartFactory.createLineChart("Length vs. Start time", "time", "lengths",
+		createDataset(eventArray), PlotOrientation.VERTICAL, true, true, false);
+		int width = 640;    /* Width of the image */
+      int height = 480;   /* Height of the image */
+      File lineChart = new File( "LineChart.jpeg" );
+      ChartUtilities.saveChartAsJPEG(lineChart ,chartObj, width ,height);
+
+		chart.pack( );
+		RefineryUtilities.centerFrameOnScreen( chart );
+		chart.setVisible( true );
     }
 }

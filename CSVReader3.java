@@ -259,17 +259,11 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime; // Total duration of program
     System.out.println("Run time is: " + totalTime + " nanoseconds");
-		LineChart_AWT chart = new LineChart_AWT(
-			 "TEST" ,
+		Chart_AWT chart = new Chart_AWT(
+			 "Scatter Plot" ,
 			 "Length vs. Start time",
 			 eventArray);
 
-		JFreeChart chartObj = ChartFactory.createLineChart("Length vs. Start time", "time", "lengths",
-		createDataset(eventArray), PlotOrientation.VERTICAL, true, true, false);
-		int width = 640;    /* Width of the image */
-      int height = 480;   /* Height of the image */
-      File lineChart = new File( "LineChart.jpeg" );
-      ChartUtilities.saveChartAsJPEG(lineChart ,chartObj, width ,height);
 
 		chart.pack( );
 		RefineryUtilities.centerFrameOnScreen( chart );

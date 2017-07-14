@@ -235,4 +235,88 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
     long totalTime = endTime - startTime; // Total duration of program
     System.out.println("Run time is: " + totalTime + " nanoseconds");
     }
+<<<<<<< HEAD
+
+
+ public static void generateCsvFile(ArrayList<String[]> eventArray)
+    {
+        String output = "Event ID, Start Time, End Time \n";
+
+for(int i = 0; i < eventArray.size;i++){
+        for (String[] events in eventArray) {
+            output += table.get(events[i]).getEventID() + ", " 
+             		+ table.get(events[i]).getStartTime + ", "
+             		+ table.get(events[i]).getEndTime   + "\n";
+        }
+
+        return output;
+    	}
+	}
+}
+public static void generateCsvFile(String fileName, ArrayList<String[]> eventArray)
+    {
+           try
+           {
+                FileWriter writer = new FileWriter(fileName);
+
+                writer.append("Email");
+                writer.append(',');
+                writer.append("Name");
+                writer.append('\n');
+
+                for (String[] events in eventArray) {
+                     writer.append(user.getEmail());
+                     writer.append(',');
+                     writer.append(user.getName());
+                     writer.append('\n');
+                }
+
+                writer.flush();
+                writer.close();
+           } catch(IOException e) {
+                 e.printStackTrace();
+           } 
+      }
+
+
+
+  // converts sorted CSV file into text file to be used by plotting program
+  public static void SortedCSVtoText(ArrayList<Strings> a) throws FileNotFoundException{
+      PrintWriter pw = new PrintWriter(new File("EventsBefore.txt"));
+      StringBuilder sb = new StringBuilder();
+      ArrayList<Integer[]> arrayOfLengths = new ArrayList<Integer[]>();
+      // append the parameter information to the text file
+      sb.append("Title Start-time vs End-time");
+      sb.append('\n');
+      sb.append("xTitle Start-time");
+      sb.append('\n');
+      sb.append("yTitle End-time");
+      sb.append('\n');
+      sb.append("xLower 0");
+      sb.append('\n');
+      sb.append("xUpper 1320000000000");
+      sb.append('\n');
+      sb.append("xInterval 100000000000");
+      sb.append('\n');
+      sb.append("yLower 0");
+      sb.append('\n');
+      sb.append("yUpper 1330000000000");
+      sb.append('\n');
+      sb.append("yInterval 100000000000");
+      sb.append('\n');
+      sb.append("Data");
+      sb.append('\n');
+
+      for (int x = 0; x < a.size(); x++) {
+          sb.append((a.get(x)).getStartTime().getTime() + " " +  (a.get(x)).getEndTime().getTime());
+          sb.append('\n');
+
+      }
+      pw.write(sb.toString());
+      pw.close();
+    }
+
+    
+=======
+>>>>>>> 7bf15b4c7808101093eddb13fb571475aef5b5ea
 }

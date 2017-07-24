@@ -2,31 +2,34 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JPanel;
+import java.lang.*;
+import java.util.*;
+import java.io.*;
 
 import org.jfree.chart.*;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.xy.DefaultXYZDataset; 
+import org.jfree.data.xy.DefaultXYZDataset;
 import org.jfree.data.xy.XYZDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 
 public class BubbleChart_AWT extends ApplicationFrame {
 
-   public BubbleChart_AWT( String s ) {
+   public BubbleChart_AWT( String s, String file ) {
       super( s );
-      JPanel jpanel = createDemoPanel( );
+      JPanel jpanel = createDemoPanel(file );
       jpanel.setPreferredSize(new Dimension( 560 , 370 ) );
       setContentPane( jpanel );
    }
 
    private static JFreeChart createChart( XYZDataset xyzdataset ) {
       JFreeChart jfreechart = ChartFactory.createBubbleChart(
-         "AGE vs WEIGHT vs WORK",
-         "Weight",
-         "AGE",
+         "LENGTH VS START TIME VS COUNT",
+         "LENGTH",
+         "START TIME",
          xyzdataset,
          PlotOrientation.HORIZONTAL,
          true, true, false);
@@ -45,19 +48,45 @@ public class BubbleChart_AWT extends ApplicationFrame {
       return jfreechart;
    }
 
-   public static XYZDataset createDataset( ) {
-      DefaultXYZDataset defaultxyzdataset = new DefaultXYZDataset();
-      double ad[ ] = { 30 , 40 , 50 , 60 , 70 , 80 };
-      double ad1[ ] = { 10 , 20 , 30 , 40 , 50 , 60 };
-      double ad2[ ] = { 4 , 5 , 10 , 8 , 9 , 6 };
-      double ad3[][] = { ad , ad1 , ad2 };
-      defaultxyzdataset.addSeries( "Series 1" , ad3 );
+   public static XYZDataset createDataset(String file ) {
 
-      return defaultxyzdataset;
+     DefaultXYZDataset defaultxyzdataset = new DefaultXYZDataset();
+
+    String csvFile = file;
+ 		String line = "";
+ 		String csvSplitBy = ",";
+    double lengthArr[] = new double[11707];
+    double startTime[] = new double[11707];
+    double countArr[] = new double[11707];
+    int counter = 0;
+ 		try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+        line = br.readLine();
+ 				while ((line = br.readLine()) != null) {
+
+ 						// use comma as separator
+ 						String[] event = line.split(csvSplitBy);
+ 						int start_time = Integer.valueOf(event[0].substring(1, event[0].length() - 1));
+            startTime[counter] = start_time;
+ 						int length = Integer.valueOf(event[1].substring(1, event[1].length() - 1));
+            lengthArr[counter] = length;
+ 						int count = Integer.valueOf(event[2].substring(1, event[2].length() - 1));
+            countArr[counter] = count;
+            counter++;
+
+
+
+ 				}
+        double ad3[][] = {lengthArr, startTime, countArr};
+        defaultxyzdataset.addSeries("Series 1", ad3);
+
+ 		} catch (IOException e) {
+ 				e.printStackTrace();
+ 		}
+    return defaultxyzdataset;
    }
 
-   public static JPanel createDemoPanel( ) {
-      JFreeChart jfreechart = createChart( createDataset( ) );
+   public static JPanel createDemoPanel(String file ) {
+      JFreeChart jfreechart = createChart( createDataset(file ) );
       ChartPanel chartpanel = new ChartPanel( jfreechart );
 
       chartpanel.setDomainZoomable( true );
@@ -67,9 +96,13 @@ public class BubbleChart_AWT extends ApplicationFrame {
    }
 
    public static void main( String args[ ] ) {
-      BubbleChart_AWT bubblechart = new BubbleChart_AWT( "Bubble Chart_frame" );
-      bubblechart.pack( );
-      RefineryUtilities.centerFrameOnScreen( bubblechart );
-      bubblechart.setVisible( true );
+     Scanner scan = new Scanner(System.in);
+     System.out.print("CSV File: ");
+     String fileName = scan.next();
+
+     BubbleChart_AWT bubblechart = new BubbleChart_AWT( "Bubble Chart_frame", fileName );
+     bubblechart.pack( );
+     RefineryUtilities.centerFrameOnScreen( bubblechart );
+     bubblechart.setVisible( true );
    }
 }

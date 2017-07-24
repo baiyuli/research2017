@@ -255,7 +255,7 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 			long startTime = System.nanoTime();
 			ArrayList<Event> eventArray = getDataFromCSVFileRoss(fileName, idCol, stCol, etCol);
 
-			//constructAATable(eventArray);
+			constructAATable(eventArray);
 			try {
 				toCSV(alanAlgebraTable, output);
 			}

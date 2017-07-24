@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.*;
+import java.awt.BasicStroke;
 
 import javax.swing.JPanel;
 
@@ -15,21 +17,23 @@ import org.jfree.ui.RefineryUtilities;
 
 public class BubbleChart_AWT extends ApplicationFrame {
 
-   public BubbleChart_AWT( String s ) {
-      super( s );
-      JPanel jpanel = createDemoPanel( );
-      jpanel.setPreferredSize(new Dimension( 560 , 370 ) );
-      setContentPane( jpanel );
+   public BubbleChart_AWT( String applicationTitle, String chartTitle, ArrayList<Event> e) {
+      super(applicationTitle);
+              
+      JPanel jpanel = createDemoPanel(e);                 
+      jpanel.setPreferredSize(new Dimension( 560 , 370 ) );                 
+      setContentPane( jpanel ); 
    }
-
-   private static JFreeChart createChart( XYZDataset xyzdataset ) {
+   public static JFreeChart createChart(XYZDataset xyzdataset){
       JFreeChart jfreechart = ChartFactory.createBubbleChart(
-         "AGE vs WEIGHT vs WORK",
-         "Weight",
-         "AGE",
+         "Start Time vs Length vs Number of Events",
+         "Length",
+         "Start Time",
          xyzdataset,
          PlotOrientation.HORIZONTAL,
          true, true, false);
+
+
 
       XYPlot xyplot = ( XYPlot )jfreechart.getPlot( );
       xyplot.setForegroundAlpha( 0.65F );
@@ -37,27 +41,62 @@ public class BubbleChart_AWT extends ApplicationFrame {
       xyitemrenderer.setSeriesPaint( 0 , Color.blue );
       NumberAxis numberaxis = ( NumberAxis )xyplot.getDomainAxis( );
       numberaxis.setLowerMargin( 0.2 );
-      numberaxis.setUpperMargin( 0.5 );
+      numberaxis.setUpperMargin( 0.3 );
       NumberAxis numberaxis1 = ( NumberAxis )xyplot.getRangeAxis( );
-      numberaxis1.setLowerMargin( 0.8 );
-      numberaxis1.setUpperMargin( 0.9 );
+      numberaxis1.setLowerMargin( 0.3 );
+      numberaxis1.setUpperMargin( 0.4 );
 
       return jfreechart;
-   }
+}
+      
+   
 
-   public static XYZDataset createDataset( ) {
+   public static XYZDataset createDataset(ArrayList<Event> event) {
       DefaultXYZDataset defaultxyzdataset = new DefaultXYZDataset();
-      double ad[ ] = { 30 , 40 , 50 , 60 , 70 , 80 };
-      double ad1[ ] = { 10 , 20 , 30 , 40 , 50 , 60 };
-      double ad2[ ] = { 4 , 5 , 10 , 8 , 9 , 6 };
-      double ad3[][] = { ad , ad1 , ad2 };
-      defaultxyzdataset.addSeries( "Series 1" , ad3 );
+      
+      ArrayList<Double> timeArrLst = new ArrayList<Double>();
+      ArrayList<Double> lengthArrLst = new ArrayList<Double>();
+      ArrayList<Double> numArrLst = new ArrayList<Double>();
 
+      double startTime = (double) event.get(0).getStartTime();
+      double length = (double) event.get(0).getLength();
+      double eventNum = 0;
+      for (int x = 0; x < event.size(); x++){
+         if(event.get(x).getStartTime()==startTime && 
+            event.get(x).getLength()==length){
+            eventNum++;
+         }
+         else{
+            startTime=event.get(x).getStartTime();
+            length=event.get(x).getLength();
+            numArrLst.add(eventNum);
+            eventNum=1; 
+            timeArrLst.add((double) event.get(x).getStartTime());
+            lengthArrLst.add((double) event.get(x).getLength());
+         }
+         
+      }
+      double[] timeArray = new double[timeArrLst.size()];
+      double[] lengthArray = new double[lengthArrLst.size()];
+      double[] numArray = new double[numArrLst.size()];
+      for(int x = 0; x<timeArrLst.size(); x++){
+         timeArray[x]=timeArrLst.get(x);
+         lengthArray[x]=lengthArrLst.get(x);
+         numArray[x]=numArrLst.get(x);
+
+      }
+      double[][] totalArray = {lengthArray, timeArray, numArray};
+      System.out.println(Arrays.toString(numArray));
+      System.out.println(Arrays.toString(timeArray));
+      System.out.println(Arrays.toString(lengthArray));
+      
+
+      defaultxyzdataset.addSeries( "Series 1" , totalArray);
       return defaultxyzdataset;
    }
 
-   public static JPanel createDemoPanel( ) {
-      JFreeChart jfreechart = createChart( createDataset( ) );
+   public static JPanel createDemoPanel(ArrayList<Event> e ) {
+      JFreeChart jfreechart = createChart( createDataset( e) );
       ChartPanel chartpanel = new ChartPanel( jfreechart );
 
       chartpanel.setDomainZoomable( true );
@@ -66,10 +105,10 @@ public class BubbleChart_AWT extends ApplicationFrame {
       return chartpanel;
    }
 
-   public static void main( String args[ ] ) {
-      BubbleChart_AWT bubblechart = new BubbleChart_AWT( "Bubble Chart_frame" );
-      bubblechart.pack( );
-      RefineryUtilities.centerFrameOnScreen( bubblechart );
-      bubblechart.setVisible( true );
-   }
+   // public static void main( String args[ ] ) {
+   //    BubbleChart_AWT bubblechart = new BubbleChart_AWT( "Bubble Chart_frame" );
+   //    bubblechart.pack( );
+   //    RefineryUtilities.centerFrameOnScreen( bubblechart );
+   //    bubblechart.setVisible( true );
+   // }
 }

@@ -139,6 +139,7 @@ public class XYBubbleRenderer extends AbstractXYItemRenderer
             throw new IllegalArgumentException("Invalid 'scaleType'.");
         }
         this.scaleType = scaleType;
+        System.out.println("yoooooo");
         setBaseLegendShape(new Ellipse2D.Double(-4.0, -4.0, 8.0, 8.0));
     }
 

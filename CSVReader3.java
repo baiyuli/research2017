@@ -199,6 +199,7 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 		return array;
 	}
 
+
 	public static void toCSV(ArrayList<String[]> a, String filename) throws FileNotFoundException{
 		PrintWriter pw = new PrintWriter(new File(filename));
 		StringBuilder sb = new StringBuilder();
@@ -253,9 +254,9 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
 			System.out.print("End time Column: ");
 			int etCol = scan.nextInt();
 			long startTime = System.nanoTime();
-			ArrayList<Event> eventArray = getDataFromCSVFileRoss(fileName, idCol, stCol, etCol);
+			//ArrayList<Event> eventArray = getDataFromCSVFileRoss(fileName, idCol, stCol, etCol);
 
-			//constructAATable(eventArray);
+			// constructAATable(eventArray);
 			try {
 				toCSV(alanAlgebraTable, output);
 			}
@@ -267,14 +268,16 @@ private static ArrayList<String[]> alanAlgebraTable = new ArrayList<String[]>();
     long endTime   = System.nanoTime();
     long totalTime = endTime - startTime; // Total duration of program
     System.out.println("Run time is: " + totalTime + " nanoseconds");
-		Chart_AWT chart = new Chart_AWT(
-			 "Scatter Plot" ,
-			 "Length vs. Start time",
-			 eventArray);
+		// Chart_AWT chart = new Chart_AWT(
+		// 	 "Scatter Plot" ,
+		// 	 "Length vs. Start time",
+		// 	 eventArray);
+		// chart.pack( );
+		// RefineryUtilities.centerFrameOnScreen( chart );
+		// chart.setVisible( true );
 
+		XYChart_Labeled chart1 = new XYChart_Labeled(fileName);
+		
 
-		chart.pack( );
-		RefineryUtilities.centerFrameOnScreen( chart );
-		chart.setVisible( true );
     }
 }

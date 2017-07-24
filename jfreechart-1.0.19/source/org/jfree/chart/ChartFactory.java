@@ -2330,6 +2330,7 @@ public abstract class ChartFactory {
      */
     public static JFreeChart createBubbleChart(String title, String xAxisLabel,
             String yAxisLabel, XYZDataset dataset) {
+        System.out.println("heyaaaaaaaaa");
         return createBubbleChart(title, xAxisLabel, yAxisLabel, dataset,
                 PlotOrientation.VERTICAL, true, true, false);
     }
@@ -2365,6 +2366,7 @@ public abstract class ChartFactory {
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, null);
 
         XYItemRenderer renderer = new XYBubbleRenderer(
+            System.out.println("whatttt");
                 XYBubbleRenderer.SCALE_ON_RANGE_AXIS);
         if (tooltips) {
             renderer.setBaseToolTipGenerator(new StandardXYZToolTipGenerator());

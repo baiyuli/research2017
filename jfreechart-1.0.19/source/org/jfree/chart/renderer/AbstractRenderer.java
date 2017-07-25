@@ -1985,6 +1985,7 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
      *
      * @return The paint (never <code>null</code>).
      */
+    
     public Paint getItemLabelPaint(int row, int column) {
         Paint result = this.itemLabelPaint;
         if (result == null) {
@@ -1995,6 +1996,8 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         }
         return result;
     }
+
+   
 
     /**
      * Returns the paint used to draw the item labels for a series.

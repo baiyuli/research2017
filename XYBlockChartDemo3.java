@@ -44,7 +44,7 @@ public class XYBlockChartDemo3 extends ApplicationFrame {
      */
     public XYBlockChartDemo3(String title, String file) {
         super(title);
-        JPanel chartPanel = createDemoPanel(file);
+        JPanel chartPanel = createDemoPanel(title, file);
         chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
         setContentPane(chartPanel);
     }
@@ -56,7 +56,7 @@ public class XYBlockChartDemo3 extends ApplicationFrame {
      *
      * @return A chart instance.
      */
-    private static JFreeChart createChart(XYZDataset dataset) {
+    private static JFreeChart createChart(String title, XYZDataset dataset) {
         NumberAxis xAxis = new NumberAxis("X");
         xAxis.setRange(1920.0, 2018.0);
         xAxis.setLowerMargin(0.0);
@@ -69,24 +69,24 @@ public class XYBlockChartDemo3 extends ApplicationFrame {
         yAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         XYBlockRenderer renderer = new XYBlockRenderer();
         LookupPaintScale paintScale = new LookupPaintScale(0.0, 1000000.0,
-                new Color (254, 0, 0));
-        paintScale.add(500.0, new Color (250, 10, 0));
-        paintScale.add(1000.0, new Color (230, 10, 0));
-        paintScale.add(2000.0, new Color (200, 10, 0));
-        paintScale.add(3000.0, new Color (175, 10, 0));
-        paintScale.add(4000.0, new Color (150, 10, 0));
-        paintScale.add(5000.0, new Color (125, 10, 0));
-        paintScale.add(6000.0, new Color (100, 10, 0));
-        paintScale.add(7000.0, new Color (75, 10, 0));
-        paintScale.add(8000.0, new Color (50, 10, 0));
-        paintScale.add(9000.0, new Color (25, 10, 0));
-        paintScale.add(10000.0, new Color (10, 10, 0));
-        paintScale.add(20000.0, new Color (10, 25, 0));
-        paintScale.add(30000.0, new Color (10, 50, 0));
-        paintScale.add(40000.0, new Color (10, 75, 0));
-        paintScale.add(50000.0, new Color (10, 100, 0));
-        paintScale.add(60000.0, new Color (10, 150, 0));
-        paintScale.add(70000.0, new Color (10, 200, 0));
+                new Color (254, 254, 0));
+        paintScale.add(10, new Color (254, 254, 0));
+        paintScale.add(20.0, new Color (254, 230, 0));
+        paintScale.add(40.0, new Color (254, 210, 0));
+        paintScale.add(80.0, new Color (254, 190, 0));
+        paintScale.add(160.0, new Color (254, 170, 0));
+        paintScale.add(320.0, new Color (254, 150, 0));
+        paintScale.add(640.0, new Color (254, 130, 0));
+        paintScale.add(1280.0, new Color (254, 110, 0));
+        paintScale.add(2560.0, new Color (254, 90, 0));
+        paintScale.add(5120.0, new Color (254, 70, 0));
+        paintScale.add(10240.0, new Color (254, 50, 0));
+        paintScale.add(20480.0, new Color (254, 30, 0));
+        paintScale.add(40960.0, new Color (254, 10, 0));
+        paintScale.add(81920.0, new Color (254, 0, 0));
+        // paintScale.add(50000.0, new Color (10, 100, 0));
+        // paintScale.add(60000.0, new Color (10, 150, 0));
+        // paintScale.add(70000.0, new Color (10, 200, 0));
         renderer.setPaintScale(paintScale);
         XYPlot plot = new XYPlot(dataset, xAxis, yAxis, renderer);
         plot.setBackgroundPaint(Color.lightGray);
@@ -94,7 +94,7 @@ public class XYBlockChartDemo3 extends ApplicationFrame {
         plot.setRangeGridlinePaint(Color.black);
         plot.setForegroundAlpha(0.66f);
         plot.setAxisOffset(new RectangleInsets(5, 5, 5, 5));
-        JFreeChart chart = new JFreeChart("XYBlockChartDemo3", plot);
+        JFreeChart chart = new JFreeChart(title, plot);
         chart.removeLegend();
         chart.setBackgroundPaint(Color.white);
         SymbolAxis scaleAxis = new SymbolAxis(null, new String[] {"", "OK",
@@ -154,8 +154,8 @@ public class XYBlockChartDemo3 extends ApplicationFrame {
      *
      * @return A panel.
      */
-    public static JPanel createDemoPanel(String file) {
-        return new ChartPanel(createChart(createDataset(file)));
+    public static JPanel createDemoPanel(String title, String file) {
+        return new ChartPanel(createChart(title, createDataset(file)));
     }
 
     /**
@@ -167,7 +167,7 @@ public class XYBlockChartDemo3 extends ApplicationFrame {
       Scanner scan = new Scanner(System.in);
       System.out.print("CSV File: ");
       String fileName = scan.next();
-        XYBlockChartDemo3 demo = new XYBlockChartDemo3("Block Chart Demo 3", fileName);
+        XYBlockChartDemo3 demo = new XYBlockChartDemo3("Length vs Start Time", fileName);
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);

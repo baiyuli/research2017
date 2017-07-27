@@ -57,11 +57,11 @@ public class XYBlockChartDemo3 extends ApplicationFrame {
      * @return A chart instance.
      */
     private static JFreeChart createChart(String title, XYZDataset dataset) {
-        NumberAxis xAxis = new NumberAxis("X");
+        NumberAxis xAxis = new NumberAxis("Start Time");
         xAxis.setRange(1920.0, 2018.0);
         xAxis.setLowerMargin(0.0);
         xAxis.setUpperMargin(0.0);
-        NumberAxis yAxis = new NumberAxis("Y");
+        NumberAxis yAxis = new NumberAxis("Length");
         // yAxis.autoAdjustRange();
         yAxis.setInverted(false);
         yAxis.setLowerMargin(0.0);

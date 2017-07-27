@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.util.*;
 import java.awt.BasicStroke;
+import java.io.*;
+
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -16,13 +18,13 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 
 public class Chart_AWT extends ApplicationFrame {
 
-   public Chart_AWT( String applicationTitle, String chartTitle, ArrayList<Event> e ) {
+   public Chart_AWT( String applicationTitle, String chartTitle, String fileName ) {
       super(applicationTitle);
       JFreeChart xylineChart = ChartFactory.createScatterPlot(
          chartTitle ,
-         "Start Time" ,
-         "Length" ,
-         createDataset(e) ,
+         "End Time" ,
+         "Number of Events" ,
+         createDataset(fileName) ,
          PlotOrientation.VERTICAL ,
          true , true , false);
 
@@ -31,22 +33,37 @@ public class Chart_AWT extends ApplicationFrame {
          setContentPane( chartPanel );
    }
 
-   private XYDataset createDataset(ArrayList<Event> event ) {
+   private static XYDataset createDataset(String fileName ) {
       XYSeriesCollection result = new XYSeriesCollection();
-      XYSeries series = new XYSeries("TEST");
-      for (int x = 0; x < event.size(); x++) {
-        series.add((double)(event.get(x).getStartTime()), (double)(event.get(x).getLength()));
-      }
-      result.addSeries(series);
+      XYSeries series = new XYSeries("Collaborations in CS Research");
+      String csvFile = fileName;
+      String line = "";
+      String csvSplitBy = ",";
+      try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+      line = br.readLine();
+      while ((line = br.readLine()) != null) {
+        String[] entry = line.split(csvSplitBy);
+        int startTime = Integer.parseInt(entry[0].substring(1, entry[0].length() - 1));
+        int numEvents = Integer.parseInt(entry[1].substring(1, entry[1].length() - 1));
 
+        series.add((double)startTime, (double)numEvents);
+        
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+      result.addSeries(series);
       return result;
    }
-   //
-  //  public static void main( String[ ] args ) {
-  //     Chart_AWT chart = new Chart_AWT("Scatter Plot",
-  //        "Length vs. Start Time");
-  //     chart.pack( );
-  //     RefineryUtilities.centerFrameOnScreen( chart );
-  //     chart.setVisible( true );
-  //  }
+   
+   public static void main(String[] args) {
+      Scanner scan = new Scanner(System.in);
+      System.out.print("CSV File: ");
+      String fileName = scan.next();
+      Chart_AWT chart = new Chart_AWT("Scatter Plot",
+         "Number of Events vs. End Time", fileName);
+      chart.pack( );
+      RefineryUtilities.centerFrameOnScreen( chart );
+      chart.setVisible( true );
+   }
 }

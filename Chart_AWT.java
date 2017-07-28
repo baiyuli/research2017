@@ -22,8 +22,8 @@ public class Chart_AWT extends ApplicationFrame {
       super(applicationTitle);
       JFreeChart xylineChart = ChartFactory.createScatterPlot(
          chartTitle ,
-         "End Time" ,
-         "Number of Events" ,
+         "Time" ,
+         "Number of Event Pairs Satisfying 'During'" ,
          createDataset(fileName) ,
          PlotOrientation.VERTICAL ,
          true , true , false);
@@ -61,7 +61,7 @@ public class Chart_AWT extends ApplicationFrame {
       System.out.print("CSV File: ");
       String fileName = scan.next();
       Chart_AWT chart = new Chart_AWT("Scatter Plot",
-         "Number of Events vs. End Time", fileName);
+         "Number of Event Pairs satisfying 'During' vs. Time", fileName);
       chart.pack( );
       RefineryUtilities.centerFrameOnScreen( chart );
       chart.setVisible( true );
